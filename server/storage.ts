@@ -40,6 +40,8 @@ export class MemStorage implements IStorage {
     const inquiry: ContactInquiry = {
       ...insertInquiry,
       id,
+      company: insertInquiry.company || "",
+      service: insertInquiry.service || "",
       createdAt: new Date(),
     };
     this.contactInquiries.set(id, inquiry);

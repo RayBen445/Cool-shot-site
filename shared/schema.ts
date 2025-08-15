@@ -14,8 +14,8 @@ export const contactInquiries = pgTable("contact_inquiries", {
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   email: text("email").notNull(),
-  company: text("company"),
-  service: text("service"),
+  company: text("company").default(""),
+  service: text("service").default(""),
   message: text("message").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
