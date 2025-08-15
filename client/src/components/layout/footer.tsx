@@ -6,7 +6,15 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
-            <h3 className="text-2xl font-bold mb-4">Cool Shot Systems</h3>
+            <div className="flex items-center space-x-3 mb-4">
+              <img 
+                src="/images/logo.jpg" 
+                alt="Cool Shot Systems Logo" 
+                className="h-12 w-auto object-contain"
+                data-testid="img-footer-logo"
+              />
+              <h3 className="text-2xl font-bold">Cool Shot Systems</h3>
+            </div>
             <p className="text-gray-300 mb-6 max-w-md">
               Transforming businesses through innovative technology solutions. Your trusted partner for digital transformation and software development.
             </p>

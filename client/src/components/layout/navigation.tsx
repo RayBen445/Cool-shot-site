@@ -22,7 +22,15 @@ export default function Navigation() {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Link href="/" data-testid="link-home">
-                <h1 className="text-2xl font-bold text-primary cursor-pointer">Cool Shot Systems</h1>
+                <div className="flex items-center space-x-3 cursor-pointer">
+                  <img 
+                    src="/images/logo.jpg" 
+                    alt="Cool Shot Systems Logo" 
+                    className="h-10 w-auto object-contain"
+                    data-testid="img-logo"
+                  />
+                  <h1 className="text-2xl font-bold text-primary hidden sm:block">Cool Shot Systems</h1>
+                </div>
               </Link>
             </div>
           </div>
