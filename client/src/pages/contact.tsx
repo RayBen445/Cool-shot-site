@@ -86,11 +86,11 @@ export default function Contact() {
                     <MapPin className="w-4 h-4 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Service Areas</h4>
+                    <h4 className="font-semibold text-gray-900 mb-1">Physical Location</h4>
                     <p className="text-gray-600" data-testid="text-office-address">
                       Ibadan, Oyo State Nigeria<br />
                       Ogbomoso, Oyo State Nigeria<br />
-                      <span className="text-sm text-gray-500">(Virtual services - available globally)</span>
+                      <span className="text-sm text-gray-500">(Available globally for remote projects)</span>
                     </p>
                   </div>
                 </div>

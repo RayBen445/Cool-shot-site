@@ -47,7 +47,7 @@ function App() {
             src="https://files.catbox.moe/lnx9jf.mp3"
             autoplay={true}
             loop={true}
-            volume={0.3}
+            volume={0.9}
           />
           <ChatWidget />
         </TooltipProvider>

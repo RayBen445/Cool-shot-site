@@ -27,14 +27,32 @@ export default function AudioPlayer({
     audio.volume = currentVolume;
     
     if (autoplay) {
-      // Try to play automatically, but handle if browser blocks it
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Browser blocked autoplay, user will need to click to start
-          setIsPlaying(false);
-        });
-      }
+      // Try to play automatically with user interaction fallback
+      const attemptPlay = () => {
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setIsPlaying(true);
+            })
+            .catch(() => {
+              // Browser blocked autoplay, try again on first user interaction
+              setIsPlaying(false);
+              const playOnInteraction = () => {
+                audio.play().then(() => {
+                  setIsPlaying(true);
+                });
+                document.removeEventListener('click', playOnInteraction);
+                document.removeEventListener('touchstart', playOnInteraction);
+              };
+              document.addEventListener('click', playOnInteraction, { once: true });
+              document.addEventListener('touchstart', playOnInteraction, { once: true });
+            });
+        }
+      };
+      
+      // Try immediate play, then fall back to user interaction
+      attemptPlay();
     }
   }, [autoplay, currentVolume]);
 

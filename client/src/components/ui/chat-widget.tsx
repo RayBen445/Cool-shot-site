@@ -86,9 +86,13 @@ You help users with questions about Cool Shot Systems' services, technology solu
       // Handle JSON response like image generator
       const data = await response.json();
       
+      if (!data.success && !data.result && !data.response && !data.answer) {
+        throw new Error('Invalid API response format');
+      }
+      
       const aiMessage: Message = {
         id: Date.now().toString() + "_ai",
-        text: data.result || data.response || data.answer || "I'm sorry, I couldn't process that request. Please try again.",
+        text: data.result || data.response || data.answer || data.message || "I'm sorry, I couldn't process that request. Please try again.",
         isUser: false,
         timestamp: new Date()
       };
@@ -132,8 +136,8 @@ You help users with questions about Cool Shot Systems' services, technology solu
 
       {/* Chat Window */}
       {isOpen && (
-        <Card className="fixed bottom-36 right-4 w-96 h-96 bg-white shadow-xl border border-gray-200 z-50 flex flex-col">
-          <CardHeader className="bg-primary text-white p-4 rounded-t-lg">
+        <Card className="fixed bottom-36 right-4 w-96 h-[28rem] bg-white shadow-xl border border-gray-200 z-50 flex flex-col">
+          <CardHeader className="bg-primary text-white p-4 rounded-t-lg flex-shrink-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <MessageCircle className="h-5 w-5" />
@@ -156,14 +160,14 @@ You help users with questions about Cool Shot Systems' services, technology solu
 
           <CardContent className="flex-1 p-0 flex flex-col">
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4" data-testid="chat-messages">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-80" data-testid="chat-messages">
               {messages.map((message) => (
                 <div
                   key={message.id}
                   className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[80%] p-3 rounded-lg ${
+                    className={`max-w-[85%] p-3 rounded-lg break-words ${
                       message.isUser
                         ? 'bg-primary text-white'
                         : 'bg-gray-100 text-gray-900'
