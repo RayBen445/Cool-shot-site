@@ -2,6 +2,10 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
+// Set up environment variables for Telegram bot
+process.env.TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "8426874909:AAEKqH6jrJobP3zTDV_gXBwSw1qhrrZQH08";
+process.env.TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "6649936329";
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
