@@ -27,6 +27,8 @@ Cool Shot Systems is a modern business website built as a full-stack web applica
 - Chat positioned in bottom-right corner with professional styling
 - Real-time messaging with typing indicators and timestamps
 - Context-aware responses focused on Cool Shot Systems services
+- Includes complete contact information for Heritage Oladoye and Cool Shot Systems
+- Provides links to email, phone, WhatsApp, GitHub, LinkedIn, Telegram, and portfolio
 
 ## User Preferences
 
