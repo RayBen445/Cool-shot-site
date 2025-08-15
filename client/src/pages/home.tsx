@@ -27,10 +27,10 @@ export default function Home() {
                 Building the Future of <span className="text-primary">Technology</span>
               </h2>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed" data-testid="text-about-description">
-                Founded in 2015, Cool Shot Systems has been at the forefront of digital innovation. We combine technical expertise with creative vision to deliver software solutions that transform businesses and drive growth.
+                Founded by Heritage Oladoye, Cool Shot Systems has been at the forefront of AI and digital innovation. We combine technical expertise with creative vision to deliver cutting-edge software solutions that transform businesses and drive growth.
               </p>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                Our team of expert developers, designers, and strategists work collaboratively to turn your ideas into powerful, scalable solutions that give you a competitive edge in today's digital landscape.
+                Heritage leads our mission to turn your ideas into powerful, scalable AI-powered solutions that give you a competitive edge in today's digital landscape, specializing in custom software development and intelligent automation.
               </p>
               <div className="grid grid-cols-2 gap-6">
                 <div className="flex items-start space-x-3">

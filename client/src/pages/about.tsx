@@ -11,8 +11,8 @@ export default function About() {
             About Cool Shot Systems
           </h1>
           <p className="text-xl text-blue-100 max-w-3xl mx-auto" data-testid="text-about-hero-description">
-            We're passionate about transforming businesses through innovative technology solutions. 
-            Our journey began in 2015 with a simple mission: to make technology work better for everyone.
+            Founded by Heritage Oladoye, we're passionate about transforming businesses through innovative AI and technology solutions. 
+            Our mission is to make cutting-edge technology accessible and beneficial for everyone.
           </p>
         </div>
       </section>
@@ -34,13 +34,13 @@ export default function About() {
                 Our Story
               </h2>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed" data-testid="text-company-story-1">
-                Cool Shot Systems was founded with the vision of bridging the gap between complex technology 
-                and real business needs. What started as a small team of passionate developers has grown into 
-                a comprehensive technology partner for businesses of all sizes.
+                Cool Shot Systems was founded by Heritage Oladoye with the vision of bridging the gap between complex technology 
+                and real business needs. With expertise in AI and full-stack development, Heritage leads the company 
+                to deliver innovative solutions that transform businesses.
               </p>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed" data-testid="text-company-story-2">
-                Today, we're proud to have delivered over 500 successful projects, helped 250+ clients transform 
-                their operations, and built a team of 50+ talented professionals who share our commitment to excellence.
+                Under Heritage's leadership, Cool Shot Systems has delivered cutting-edge projects, helped numerous clients transform 
+                their operations, and established itself as a trusted technology partner specializing in AI solutions and custom software development.
               </p>
               <div className="grid grid-cols-2 gap-6">
                 <div className="flex items-start space-x-3">

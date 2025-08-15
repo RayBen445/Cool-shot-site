@@ -33,10 +33,14 @@ export default function ImageGenerator() {
         throw new Error('Failed to generate image');
       }
 
-      // The API returns the image directly
-      const imageBlob = await response.blob();
-      const imageUrl = URL.createObjectURL(imageBlob);
-      setGeneratedImage(imageUrl);
+      // The API returns JSON with the image URL
+      const data = await response.json();
+      
+      if (!data.success || !data.result) {
+        throw new Error('Failed to generate image');
+      }
+      
+      setGeneratedImage(data.result);
 
       toast({
         title: "Image Generated Successfully!",
@@ -54,14 +58,30 @@ export default function ImageGenerator() {
     }
   };
 
-  const downloadImage = () => {
+  const downloadImage = async () => {
     if (generatedImage) {
-      const link = document.createElement('a');
-      link.href = generatedImage;
-      link.download = `ai-generated-${Date.now()}.jpg`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      try {
+        // Fetch the image from the URL and create a blob for download
+        const response = await fetch(generatedImage);
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `ai-generated-${Date.now()}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Clean up the object URL
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        toast({
+          title: "Download Failed",
+          description: "Unable to download the image. Please try right-clicking and saving the image.",
+          variant: "destructive",
+        });
+      }
     }
   };
 

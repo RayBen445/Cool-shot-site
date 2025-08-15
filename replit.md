@@ -6,6 +6,27 @@ Cool Shot Systems is a modern business website built as a full-stack web applica
 
 ## Recent Changes (August 15, 2025)
 
+### Website Personalization (Latest Update)
+- Updated all content to feature Heritage Oladoye as the founder and CEO
+- Replaced team section to showcase Heritage Oladoye exclusively
+- Updated contact information with Heritage's real details:
+  - Email: oladoyeheritage445@gmail.com
+  - Phone: +234 807 561 4248 / +234 913 560 0014
+  - Location: Nigeria (available for global remote projects)
+  - 24/7 availability
+- Added comprehensive social media links for Heritage:
+  - WhatsApp: https://wa.me/2348075614248
+  - Telegram: https://t.me/Prof_essor2025
+  - GitHub: https://github.com/RayBen445
+  - LinkedIn: https://www.linkedin.com/in/heritage-oladoye-962a28341
+  - Portfolio: https://rayben445.github.io/cs-assistant/
+- Updated company story and hero sections to emphasize Heritage's expertise in AI and full-stack development
+- Fixed AI image generator to properly handle JSON API responses
+- Removed placeholder/generic team member information
+- Enhanced focus on AI expertise and cutting-edge technology solutions
+
+## Previous Changes
+
 ### Background Music Integration
 - Added floating audio player component with play/pause, volume controls, and mute functionality
 - Integrated background music from user-provided audio file (https://files.catbox.moe/lnx9jf.mp3)
