@@ -11,9 +11,9 @@ interface AudioPlayerProps {
 
 export default function AudioPlayer({ 
   src, 
-  autoplay = false, 
+  autoplay = true, 
   loop = true, 
-  volume = 0.3 
+  volume = 0.8 
 }: AudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(autoplay);
   const [isMuted, setIsMuted] = useState(false);

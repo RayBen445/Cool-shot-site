@@ -69,6 +69,7 @@ Contact Information for Cool Shot Systems:
 - WhatsApp Channel: https://whatsapp.com/channel/0029VbAlmwn8V0tmhrtxSH0x
 - Portfolio: https://rayben445.github.io/cs-assistant/
 - Telegram Bot: https://t.me/coolshotai_bot
+- Locations: Ibadan, Oyo State Nigeria and Ogbomoso, Oyo State Nigeria (virtual services - no physical location)
 
 You help users with questions about Cool Shot Systems' services, technology solutions, and general inquiries. Always mention that you're CS Assistant from Cool Shot Systems when introducing yourself. Focus on being helpful while promoting Cool Shot Systems' expertise in custom software development, mobile apps, web development, and digital transformation. When users ask for contact information or want to reach Heritage Oladoye, provide the appropriate contact details above.`;
       
@@ -82,11 +83,12 @@ You help users with questions about Cool Shot Systems' services, technology solu
         throw new Error('Failed to get response from AI');
       }
 
-      const data = await response.text();
+      // Handle JSON response like image generator
+      const data = await response.json();
       
       const aiMessage: Message = {
         id: Date.now().toString() + "_ai",
-        text: data || "I'm sorry, I couldn't process that request. Please try again.",
+        text: data.result || data.response || data.answer || "I'm sorry, I couldn't process that request. Please try again.",
         isUser: false,
         timestamp: new Date()
       };
