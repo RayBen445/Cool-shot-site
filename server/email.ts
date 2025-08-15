@@ -1,47 +1,57 @@
-// Email service utility
-interface ContactEmailData {
+// Contact notification service
+interface ContactNotificationData {
   firstName: string;
   lastName: string;
   email: string;
-  company?: string;
-  service?: string;
+  company?: string | null;
+  service?: string | null;
   message: string;
 }
 
-export async function sendContactEmail(data: ContactEmailData): Promise<boolean> {
+export async function sendContactNotification(data: ContactNotificationData): Promise<boolean> {
   try {
-    // Option 1: EmailJS (Frontend-based, no API key needed)
-    // This can be implemented on the frontend using EmailJS service
+    // Send to Telegram Bot
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
     
-    // Option 2: Simple webhook to external service
-    const webhookUrl = process.env.WEBHOOK_URL;
-    if (webhookUrl) {
-      const response = await fetch(webhookUrl, {
+    if (botToken && chatId) {
+      const telegramMessage = `
+🔔 *New Contact Form Submission*
+
+👤 *Name:* ${data.firstName} ${data.lastName}
+📧 *Email:* ${data.email}
+🏢 *Company:* ${data.company || 'Not provided'}
+🛠 *Service:* ${data.service || 'Not provided'}
+
+💬 *Message:*
+${data.message}
+
+---
+_From Cool Shot Systems website_
+      `.trim();
+
+      const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+      const response = await fetch(telegramUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          to: 'oladoyeheritage445@gmail.com',
-          subject: `New Contact Form Submission from ${data.firstName} ${data.lastName}`,
-          html: `
-            <h2>New Contact Form Submission</h2>
-            <p><strong>Name:</strong> ${data.firstName} ${data.lastName}</p>
-            <p><strong>Email:</strong> ${data.email}</p>
-            <p><strong>Company:</strong> ${data.company || 'Not provided'}</p>
-            <p><strong>Service:</strong> ${data.service || 'Not provided'}</p>
-            <p><strong>Message:</strong></p>
-            <p>${data.message}</p>
-            <hr>
-            <p><em>Sent from Cool Shot Systems website contact form</em></p>
-          `
+          chat_id: chatId,
+          text: telegramMessage,
+          parse_mode: 'Markdown'
         })
       });
       
-      return response.ok;
+      if (response.ok) {
+        console.log('✅ Telegram notification sent successfully');
+        return true;
+      } else {
+        console.error('❌ Telegram notification failed:', await response.text());
+      }
     }
 
-    // Option 3: Log to console for now (development)
+    // Fallback: Log to console
     console.log('📧 New Contact Form Submission:');
     console.log(`Name: ${data.firstName} ${data.lastName}`);
     console.log(`Email: ${data.email}`);
@@ -52,7 +62,7 @@ export async function sendContactEmail(data: ContactEmailData): Promise<boolean>
     
     return true;
   } catch (error) {
-    console.error('Email sending failed:', error);
+    console.error('Contact notification failed:', error);
     return false;
   }
 }

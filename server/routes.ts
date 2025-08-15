@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactInquirySchema } from "@shared/schema";
-import { sendContactEmail } from "./email";
+import { sendContactNotification } from "./email";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -12,8 +12,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validatedData = insertContactInquirySchema.parse(req.body);
       const inquiry = await storage.createContactInquiry(validatedData);
       
-      // Send email notification
-      await sendContactEmail(validatedData);
+      // Send notification (Telegram or console)
+      await sendContactNotification(validatedData);
       
       res.json({ success: true, inquiry });
     } catch (error) {
