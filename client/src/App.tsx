@@ -11,6 +11,7 @@ import About from "@/pages/about";
 import Services from "@/pages/services";
 import Portfolio from "@/pages/portfolio";
 import Contact from "@/pages/contact";
+import AIGenerator from "@/pages/ai-generator";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/layout/navigation";
 import Footer from "@/components/layout/footer";
@@ -26,6 +27,7 @@ function Router() {
           <Route path="/services" component={Services} />
           <Route path="/portfolio" component={Portfolio} />
           <Route path="/contact" component={Contact} />
+          <Route path="/ai-generator" component={AIGenerator} />
           <Route component={NotFound} />
         </Switch>
       </main>

@@ -2,7 +2,7 @@ import { Link } from "wouter";
 
 export default function Footer() {
   return (
-    <footer className="bg-secondary text-white py-12">
+    <footer className="bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 text-white py-12 border-t-4 border-gradient-to-r from-blue-500 to-purple-500">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
@@ -15,8 +15,8 @@ export default function Footer() {
               />
               <h3 className="text-2xl font-bold">Cool Shot Systems</h3>
             </div>
-            <p className="text-gray-300 mb-6 max-w-md">
-              Transforming businesses through innovative technology solutions. Your trusted partner for digital transformation and software development.
+            <p className="text-blue-100 mb-6 max-w-md">
+              Transforming businesses through innovative technology solutions including AI image generation. Your trusted partner for digital transformation and software development.
             </p>
             <div className="flex space-x-4">
               <a 
@@ -51,20 +51,20 @@ export default function Footer() {
           
           <div>
             <h4 className="text-lg font-semibold mb-4">Services</h4>
-            <ul className="space-y-2 text-gray-300">
+            <ul className="space-y-2 text-blue-100">
               <li><Link href="/services"><span className="hover:text-white transition-colors duration-200 cursor-pointer">Custom Software</span></Link></li>
               <li><Link href="/services"><span className="hover:text-white transition-colors duration-200 cursor-pointer">Mobile Apps</span></Link></li>
               <li><Link href="/services"><span className="hover:text-white transition-colors duration-200 cursor-pointer">Web Development</span></Link></li>
-              <li><Link href="/services"><span className="hover:text-white transition-colors duration-200 cursor-pointer">Cloud Solutions</span></Link></li>
+              <li><Link href="/ai-generator"><span className="hover:text-white transition-colors duration-200 cursor-pointer">AI Image Generation</span></Link></li>
             </ul>
           </div>
           
           <div>
             <h4 className="text-lg font-semibold mb-4">Company</h4>
-            <ul className="space-y-2 text-gray-300">
+            <ul className="space-y-2 text-blue-100">
               <li><Link href="/about"><span className="hover:text-white transition-colors duration-200 cursor-pointer">About Us</span></Link></li>
-              <li><a href="#" className="hover:text-white transition-colors duration-200">Careers</a></li>
-              <li><a href="#" className="hover:text-white transition-colors duration-200">Blog</a></li>
+              <li><Link href="/portfolio"><span className="hover:text-white transition-colors duration-200 cursor-pointer">Portfolio</span></Link></li>
+              <li><a href="https://t.me/coolshotai_bot" className="hover:text-white transition-colors duration-200">AI Bot</a></li>
               <li><Link href="/contact"><span className="hover:text-white transition-colors duration-200 cursor-pointer">Contact</span></Link></li>
             </ul>
           </div>
