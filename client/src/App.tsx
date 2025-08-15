@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import AudioPlayer from "@/components/ui/audio-player";
+import ChatWidget from "@/components/ui/chat-widget";
 import Home from "@/pages/home";
 import About from "@/pages/about";
 import Services from "@/pages/services";
@@ -46,6 +47,7 @@ function App() {
             loop={true}
             volume={0.3}
           />
+          <ChatWidget />
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
