@@ -31,8 +31,8 @@ export default function Hero() {
           </div>
           <div className="relative">
             <img 
-              src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-              alt="Modern tech office workspace" 
+              src="https://files.catbox.moe/172avo.jpg" 
+              alt="Heritage Oladoye - Founder of Cool Shot Systems" 
               className="rounded-xl shadow-2xl w-full h-auto"
               data-testid="img-hero"
             />

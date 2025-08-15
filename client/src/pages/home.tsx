@@ -16,8 +16,8 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <img 
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-                alt="Software development team collaborating" 
+                src="https://files.catbox.moe/172avo.jpg" 
+                alt="Heritage Oladoye - Founder of Cool Shot Systems" 
                 className="rounded-xl shadow-lg w-full h-auto"
                 data-testid="img-about-preview"
               />

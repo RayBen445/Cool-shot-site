@@ -4,7 +4,7 @@ export default function Team() {
       name: "Heritage Oladoye",
       role: "Founder & CEO", 
       description: "Expert in AI, full-stack development, and innovative technology solutions",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300",
+      image: "https://files.catbox.moe/172avo.jpg",
       alt: "Heritage Oladoye, Founder & CEO of Cool Shot Systems"
     }
   ];

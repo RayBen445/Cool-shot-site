@@ -9,6 +9,11 @@ Cool Shot Systems is a modern business website built as a full-stack web applica
 ### Website Personalization (Latest Update)
 - Updated all content to feature Heritage Oladoye as the founder and CEO
 - Replaced team section to showcase Heritage Oladoye exclusively
+- Integrated Heritage's actual photo (https://files.catbox.moe/172avo.jpg) across:
+  - Hero section
+  - About page company story
+  - Team section profile
+  - Home page about preview
 - Updated contact information with Heritage's real details:
   - Email: oladoyeheritage445@gmail.com
   - Phone: +234 807 561 4248 / +234 913 560 0014
