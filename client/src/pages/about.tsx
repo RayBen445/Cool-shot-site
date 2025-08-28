@@ -5,12 +5,17 @@ export default function About() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-primary to-accent text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="relative py-20 bg-gradient-to-br from-primary/10 via-accent/5 to-background text-foreground overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-accent/5"></div>
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-primary/10 to-accent/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-accent/10 to-primary/10 rounded-full blur-3xl"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl font-bold mb-6" data-testid="text-about-hero-title">
             About Cool Shot Systems
           </h1>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto" data-testid="text-about-hero-description">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto" data-testid="text-about-hero-description">
             Founded by Heritage Oladoye, we're passionate about transforming businesses through innovative AI and technology solutions. 
             Our mission is to make cutting-edge technology accessible and beneficial for everyone.
           </p>

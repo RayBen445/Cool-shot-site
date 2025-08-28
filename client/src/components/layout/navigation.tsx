@@ -17,7 +17,7 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 shadow-lg sticky top-0 z-50 border-b border-blue-700">
+    <nav className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
@@ -30,27 +30,27 @@ export default function Navigation() {
                     className="h-10 w-auto object-contain"
                     data-testid="img-logo"
                   />
-                  <h1 className="text-2xl font-bold text-white hidden sm:block">Cool Shot Systems</h1>
+                  <h1 className="text-2xl font-bold text-foreground hidden sm:block">Cool Shot Systems</h1>
                 </div>
               </Link>
             </div>
           </div>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-1">
             {navigation.map((item) => (
               <Link key={item.name} href={item.href} data-testid={`link-${item.name.toLowerCase().replace(' ', '-')}`}>
-                <span className={`transition-colors duration-200 cursor-pointer ${
+                <span className={`transition-all duration-200 cursor-pointer px-4 py-2 rounded-lg text-sm font-medium ${
                   location === item.href 
-                    ? "text-white font-medium bg-white/20 px-3 py-1 rounded-lg" 
-                    : "text-blue-100 hover:text-white hover:bg-white/10 px-3 py-1 rounded-lg"
+                    ? "text-primary bg-primary/10 shadow-sm" 
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
                 }`}>
                   {item.name}
                 </span>
               </Link>
             ))}
             <Link href="/contact" data-testid="button-get-started">
-              <Button className="bg-white text-blue-600 hover:bg-blue-50 transition-all duration-200 shadow-lg font-semibold">
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 shadow-sm font-medium ml-4">
                 Get Started
               </Button>
             </Link>
@@ -65,9 +65,9 @@ export default function Navigation() {
               data-testid="button-mobile-menu"
             >
               {isMenuOpen ? (
-                <X className="h-6 w-6 text-white" />
+                <X className="h-6 w-6 text-foreground" />
               ) : (
-                <Menu className="h-6 w-6 text-white" />
+                <Menu className="h-6 w-6 text-foreground" />
               )}
             </Button>
           </div>
@@ -75,15 +75,15 @@ export default function Navigation() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden pb-4 bg-gradient-to-b from-transparent to-blue-900/20">
-            <div className="flex flex-col space-y-2">
+          <div className="md:hidden pb-4 bg-white/95 backdrop-blur-sm border-t border-border">
+            <div className="flex flex-col space-y-1 pt-4">
               {navigation.map((item) => (
                 <Link key={item.name} href={item.href} data-testid={`link-mobile-${item.name.toLowerCase().replace(' ', '-')}`}>
                   <span
-                    className={`block px-3 py-2 transition-colors duration-200 cursor-pointer rounded-lg mx-2 ${
+                    className={`block px-4 py-3 transition-all duration-200 cursor-pointer rounded-lg mx-2 text-sm font-medium ${
                       location === item.href 
-                        ? "text-white font-medium bg-white/20" 
-                        : "text-blue-100 hover:text-white hover:bg-white/10"
+                        ? "text-primary bg-primary/10" 
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
                     }`}
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -93,7 +93,7 @@ export default function Navigation() {
               ))}
               <Link href="/contact" data-testid="button-mobile-get-started">
                 <Button 
-                  className="bg-white text-blue-600 hover:bg-blue-50 transition-all duration-200 mx-3 mt-2 shadow-lg font-semibold"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 mx-3 mt-2 shadow-sm font-medium"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Get Started
