@@ -1,0 +1,25 @@
+# Development files
+.replit
+replit.md
+.local/
+.config/
+
+# Build artifacts (these should be built on Vercel)
+dist/
+node_modules/
+
+# Server files (not needed for Vercel deployment)
+server/
+
+# Documentation and examples
+website-download/
+README.md
+DEPLOYMENT.md
+
+# TypeScript config files (still needed for build)
+# tsconfig.json
+# vite.config.ts
+
+# Development dependencies
+.git/
+.gitignore
