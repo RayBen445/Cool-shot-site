@@ -19,6 +19,8 @@ Cool Shot Systems is a full-stack web application featuring:
 - ⚡ Fast loading with Vite
 - 🔒 Type-safe with TypeScript
 - 📧 Contact form with Telegram notifications
+- 🤖 AI-powered chat using Google Gemini 2.0 Flash
+- 🎨 AI image generation with Google Gemini Imagen 4.0 (Gifted API fallback)
 - 🎨 Beautiful UI with Radix components
 - 🌙 Theme support
 - 📊 Analytics integration ready
@@ -60,7 +62,7 @@ Cool Shot Systems is a full-stack web application featuring:
 Set these environment variables in your Vercel dashboard:
 
 ```bash
-# AI Chat Functionality (required for chat widget)
+# AI Chat & Image Generation (recommended for full AI features)
 GEMINI_API_KEY=your_google_gemini_api_key
 
 # Telegram Bot Notifications (optional)
@@ -77,6 +79,11 @@ DATABASE_URL=your_neon_database_url
 3. Click "Get API Key" in the left sidebar
 4. Create a new API key or use an existing one
 5. Copy the API key and add it to your Vercel environment variables
+
+**Note on AI Services:**
+- **Chat functionality**: Uses Google Gemini 2.0 Flash model for intelligent conversations
+- **Image generation**: Prioritizes Google Gemini's Imagen 4.0 with Gifted API as fallback for reliability
+- If `GEMINI_API_KEY` is not set, chat will not work and image generation will use Gifted API only
 
 ## Local Development
 
@@ -110,7 +117,9 @@ DATABASE_URL=your_neon_database_url
 ```
 Cool-shot-site/
 ├── api/                    # Vercel serverless functions
-│   └── contact.ts         # Contact form API endpoint
+│   ├── contact.ts         # Contact form API endpoint
+│   ├── gemini-chat.ts     # AI chat using Google Gemini
+│   └── generate-image.ts  # AI image generation (Gemini + Gifted fallback)
 ├── client/                # React frontend application
 │   ├── src/
 │   │   ├── components/    # Reusable UI components
@@ -186,8 +195,30 @@ Send a message to the AI chat assistant powered by Google Gemini.
 }
 ```
 
-**Environment Variables Required:**
-- `GEMINI_API_KEY` - Your Google Gemini API key
+### POST /api/generate-image  
+Generate AI images using Google Gemini with Gifted API as fallback.
+
+**Request Body:**
+```json
+{
+  "prompt": "string (image description)"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "result": "string (image URL or data URL)",
+  "imageUrl": "string (image URL or data URL)",
+  "provider": "gemini | gifted",
+  "message": "string (success message)"
+}
+```
+
+**Environment Variables:**
+- `GEMINI_API_KEY` - Your Google Gemini API key (recommended for both chat and image generation)
+- Image generation will fallback to Gifted API if Gemini is unavailable
 
 ## Technologies
 

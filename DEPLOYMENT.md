@@ -17,15 +17,15 @@
 3. **Set Environment Variables:**
    In your Vercel project dashboard, add these environment variables:
    ```
-   # Required for Telegram contact notifications
+   # Required for AI chat and image generation functionality
+   GEMINI_API_KEY=your_google_gemini_api_key_here
+   
+   # Required for Telegram contact notifications (optional)
    TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here
    TELEGRAM_CHAT_ID=your_telegram_chat_id_here
-   
-   # Required for AI chat functionality (Gemini API)
-   GEMINI_API_KEY=your_google_gemini_api_key_here
    ```
 
-   **Note:** The AI chat feature requires a valid Google Gemini API key. Get one from [Google AI Studio](https://aistudio.google.com/). The contact form will work without these variables, but Telegram notifications will be disabled.
+   **Note:** The AI features (chat & image generation) require a valid Google Gemini API key. Get one from [Google AI Studio](https://aistudio.google.com/). Image generation will fallback to Gifted API if Gemini is unavailable. The contact form will work without these variables, but Telegram notifications will be disabled.
 
 4. **Deploy:**
    - Click "Deploy"
@@ -63,6 +63,8 @@ The project includes these Vercel-specific configurations:
 
 ### API Functions (`/api/`)
 - `api/contact.ts` - Contact form endpoint
+- `api/gemini-chat.ts` - AI chat using Google Gemini 2.0 Flash
+- `api/generate-image.ts` - AI image generation (Gemini + Gifted fallback)
 - Automatically deployed as serverless functions
 - Uses TypeScript with `@vercel/node` runtime
 
@@ -75,6 +77,8 @@ The project includes these Vercel-specific configurations:
 
 ✅ **Static Site Generation** - Fast loading React SPA  
 ✅ **Serverless API** - Contact form backend  
+✅ **AI Chat Integration** - Google Gemini 2.0 Flash powered conversations  
+✅ **AI Image Generation** - Gemini Imagen 4.0 with Gifted API fallback  
 ✅ **TypeScript Support** - Full type safety  
 ✅ **Environment Variables** - Secure config management  
 ✅ **Custom Domains** - Easy domain configuration  
