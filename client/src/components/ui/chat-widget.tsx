@@ -75,24 +75,31 @@ You help users with questions about Cool Shot Systems' services, technology solu
       
       const fullQuery = `${systemContext}\n\nUser question: ${inputMessage}`;
       
-      const response = await fetch(
-        `https://api.giftedtech.co.ke/api/ai/openai?apikey=gifted&q=${encodeURIComponent(fullQuery)}`
-      );
+      // Use the new Gemini API endpoint instead of Gifted API
+      const response = await fetch('/api/gemini-chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: fullQuery
+        })
+      });
 
       if (!response.ok) {
         throw new Error('Failed to get response from AI');
       }
 
-      // Handle JSON response like image generator
+      // Handle JSON response from our Gemini API
       const data = await response.json();
       
-      if (!data.success && !data.result && !data.response && !data.answer) {
-        throw new Error('Invalid API response format');
+      if (!data.success) {
+        throw new Error(data.error || 'Invalid API response format');
       }
       
       const aiMessage: Message = {
         id: Date.now().toString() + "_ai",
-        text: data.result || data.response || data.answer || data.message || "I'm sorry, I couldn't process that request. Please try again.",
+        text: data.result || data.response || data.message || "I'm sorry, I couldn't process that request. Please try again.",
         isUser: false,
         timestamp: new Date()
       };

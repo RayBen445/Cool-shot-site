@@ -60,6 +60,9 @@ Cool Shot Systems is a full-stack web application featuring:
 Set these environment variables in your Vercel dashboard:
 
 ```bash
+# AI Chat Functionality (required for chat widget)
+GEMINI_API_KEY=your_google_gemini_api_key
+
 # Telegram Bot Notifications (optional)
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token
 TELEGRAM_CHAT_ID=your_telegram_chat_id
@@ -67,6 +70,13 @@ TELEGRAM_CHAT_ID=your_telegram_chat_id
 # Database (optional - uses in-memory storage by default)
 DATABASE_URL=your_neon_database_url
 ```
+
+**Getting Your Gemini API Key:**
+1. Visit [Google AI Studio](https://aistudio.google.com/)
+2. Sign in with your Google account
+3. Click "Get API Key" in the left sidebar
+4. Create a new API key or use an existing one
+5. Copy the API key and add it to your Vercel environment variables
 
 ## Local Development
 
@@ -155,6 +165,29 @@ Submit a contact form inquiry.
 
 ### GET /api/contact
 Retrieve all contact inquiries (admin endpoint).
+
+### POST /api/gemini-chat
+Send a message to the AI chat assistant powered by Google Gemini.
+
+**Request Body:**
+```json
+{
+  "message": "string"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "result": "string (AI response)",
+  "response": "string (AI response)",
+  "message": "string (AI response)"
+}
+```
+
+**Environment Variables Required:**
+- `GEMINI_API_KEY` - Your Google Gemini API key
 
 ## Technologies
 

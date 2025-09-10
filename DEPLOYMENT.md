@@ -14,12 +14,18 @@
    - Output Directory: `dist/public`
    - Install Command: `npm install`
 
-3. **Set Environment Variables (optional):**
+3. **Set Environment Variables:**
    In your Vercel project dashboard, add these environment variables:
    ```
+   # Required for Telegram contact notifications
    TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here
    TELEGRAM_CHAT_ID=your_telegram_chat_id_here
+   
+   # Required for AI chat functionality (Gemini API)
+   GEMINI_API_KEY=your_google_gemini_api_key_here
    ```
+
+   **Note:** The AI chat feature requires a valid Google Gemini API key. Get one from [Google AI Studio](https://aistudio.google.com/). The contact form will work without these variables, but Telegram notifications will be disabled.
 
 4. **Deploy:**
    - Click "Deploy"
