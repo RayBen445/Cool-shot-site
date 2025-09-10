@@ -1,6 +1,15 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { insertContactInquirySchema } from '../../shared/schema';
 import { z } from 'zod';
+
+// Inline schema definition for Vercel function (to avoid path resolution issues)
+const insertContactInquirySchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"), 
+  email: z.string().email("Invalid email address"),
+  company: z.string().optional(),
+  service: z.string().optional(),
+  message: z.string().min(1, "Message is required")
+});
 
 // In-memory storage for demo purposes
 // In production, this should use a proper database like Neon
@@ -101,7 +110,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       contactInquiries.push(inquiry);
       
       // Send notification (Telegram or console)
-      await sendContactNotification(validatedData);
+      await sendContactNotification(validatedData as ContactNotificationData);
       
       return res.json({ success: true, inquiry });
 
