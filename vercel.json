@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "npm run build:client",
+  "buildCommand": "npm ci && npm run build:client",
   "outputDirectory": "dist/public",
-  "installCommand": "npm install",
+  "installCommand": "npm ci",
   "framework": null,
   "functions": {
     "api/**/*.ts": {
