@@ -1,0 +1,36 @@
+# Exclude server directory (development only)
+server/
+
+# Exclude development and build artifacts
+node_modules/
+.git/
+.github/
+.config/
+.local/
+.replit
+replit.md
+
+# Exclude unnecessary downloaded artifacts
+website-download/
+
+# Exclude development files
+*.md
+!README.md
+tsconfig.json
+vite.config.ts
+drizzle.config.ts
+tailwind.config.ts
+postcss.config.js
+components.json
+
+# Exclude source files (should be built)
+client/
+
+# Exclude shared files (used in build but not served)
+shared/
+
+# Keep only built assets and API functions
+# dist/public/ (built frontend)
+# api/ (serverless functions)
+# vercel.json (deployment config)
+# package.json (for dependencies)

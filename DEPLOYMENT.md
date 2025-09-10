@@ -102,6 +102,11 @@ The project includes these Vercel-specific configurations:
 - Ensure `vercel.json` rewrites are configured correctly
 - Check that SPA routing works with the rewrites
 
+### Server Code Exposure Issues
+- If raw server-side code appears in browser, check `.vercelignore` excludes `server/` directory
+- Ensure only `dist/public/` and `api/` are deployed to Vercel
+- Verify `outputDirectory` is set to `dist/public` in `vercel.json`
+
 ## Support
 
 - [Vercel Documentation](https://vercel.com/docs)
