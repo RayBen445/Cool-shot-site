@@ -25,9 +25,16 @@ export default function ImageGenerator() {
     setIsGenerating(true);
 
     try {
-      const response = await fetch(
-        `https://api.giftedtech.co.ke/api/ai/fluximg?apikey=gifted&prompt=${encodeURIComponent(prompt)}`
-      );
+      // Use the new API endpoint that supports Gemini with Gifted fallback
+      const response = await fetch('/api/generate-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: prompt
+        })
+      });
 
       if (!response.ok) {
         throw new Error('Failed to generate image');
@@ -37,14 +44,14 @@ export default function ImageGenerator() {
       const data = await response.json();
       
       if (!data.success || !data.result) {
-        throw new Error('Failed to generate image');
+        throw new Error(data.error || 'Failed to generate image');
       }
       
       setGeneratedImage(data.result);
 
       toast({
         title: "Image Generated Successfully!",
-        description: "Your AI-generated image is ready to view and download.",
+        description: `Your AI-generated image is ready to view and download. ${data.provider ? `Generated using ${data.provider === 'gemini' ? 'Google Gemini' : 'Gifted API'}.` : ''}`,
       });
     } catch (error) {
       console.error('Image generation error:', error);
