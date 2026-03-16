@@ -1,0 +1,92 @@
+
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+12:28:41 AM [express] serving on port 5000
+Browserslist: browsers data (caniuse-lite) is 17 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+12:35:05 AM [vite] hmr update /src/pages/csslab/lab.tsx, /src/index.css?v=jeiPg8F3mDFsvr0sGPHI3
+12:35:28 AM [vite] hmr update /src/pages/csslab/lab.tsx, /src/index.css?v=jeiPg8F3mDFsvr0sGPHI3
+1:07:14 AM [vite] page reload index.html
+1:07:14 AM [vite] hmr update /src/App.tsx?v=jeiPg8F3mDFsvr0sGPHI3, /src/index.css?v=jeiPg8F3mDFsvr0sGPHI3
+1:07:14 AM [vite] hmr update /src/index.css?v=jeiPg8F3mDFsvr0sGPHI3
+1:07:14 AM [vite] page reload src/main.tsx
+1:07:14 AM [vite] hmr update /src/components/layout/footer.tsx
+1:07:14 AM [vite] hmr update /src/components/layout/navigation.tsx
+1:07:14 AM [vite] page reload src/components/sections/hero.tsx
+1:07:14 AM [vite] page reload src/components/sections/stats.tsx
+1:07:14 AM [vite] page reload src/components/sections/team.tsx
+1:07:14 AM [vite] page reload src/components/ui/accordion.tsx
+1:07:14 AM [vite] page reload src/components/ui/alert-dialog.tsx
+1:07:14 AM [vite] page reload src/components/ui/alert.tsx
+1:07:14 AM [vite] page reload src/components/ui/aspect-ratio.tsx
+1:07:14 AM [vite] hmr update /src/components/ui/audio-player.tsx
+1:07:14 AM [vite] page reload src/components/ui/avatar.tsx
+1:07:14 AM [vite] page reload src/components/ui/badge.tsx
+1:07:14 AM [vite] page reload src/components/ui/breadcrumb.tsx
+1:07:14 AM [vite] hmr update /src/components/ui/button.tsx
+1:07:14 AM [vite] page reload src/components/ui/calendar.tsx
+1:07:14 AM [vite] hmr update /src/components/ui/card.tsx
+1:07:14 AM [vite] page reload src/components/ui/carousel.tsx
+1:07:14 AM [vite] page reload src/components/ui/chart.tsx
+1:07:14 AM [vite] hmr update /src/components/ui/chat-widget.tsx
+1:07:14 AM [vite] page reload src/components/ui/checkbox.tsx
+1:07:14 AM [vite] page reload src/components/ui/collapsible.tsx
+1:07:14 AM [vite] page reload src/components/ui/command.tsx
+1:07:14 AM [vite] page reload src/components/ui/context-menu.tsx
+1:07:14 AM [vite] page reload src/components/ui/dialog.tsx
+1:07:14 AM [vite] page reload src/components/ui/drawer.tsx
+1:07:14 AM [vite] page reload src/components/ui/dropdown-menu.tsx
+1:07:14 AM [vite] page reload src/components/ui/form.tsx
+1:07:14 AM [vite] page reload src/components/ui/hover-card.tsx
+1:07:14 AM [vite] page reload src/components/ui/image-generator.tsx
+1:07:14 AM [vite] page reload src/components/ui/input-otp.tsx
+1:07:14 AM [vite] hmr update /src/components/ui/input.tsx
+1:07:14 AM [vite] page reload src/components/ui/label.tsx
+1:07:14 AM [vite] page reload src/components/ui/menubar.tsx
+1:07:14 AM [vite] page reload src/components/ui/navigation-menu.tsx
+1:07:14 AM [vite] page reload src/components/ui/pagination.tsx
+1:07:14 AM [vite] page reload src/components/ui/popover.tsx
+1:07:14 AM [vite] page reload src/components/ui/progress.tsx
+1:07:14 AM [vite] page reload src/components/ui/radio-group.tsx
+1:07:14 AM [vite] hmr update /src/components/ui/resizable.tsx
+1:07:14 AM [vite] page reload src/components/ui/scroll-area.tsx
+1:07:14 AM [vite] page reload src/components/ui/select.tsx
+1:07:14 AM [vite] page reload src/components/ui/separator.tsx
+1:07:14 AM [vite] page reload src/components/ui/sheet.tsx
+1:07:14 AM [vite] page reload src/components/ui/sidebar.tsx
+1:07:14 AM [vite] page reload src/components/ui/skeleton.tsx
+1:07:14 AM [vite] page reload src/components/ui/slider.tsx
+1:07:14 AM [vite] page reload src/components/ui/switch.tsx
+1:07:14 AM [vite] page reload src/components/ui/table.tsx
+1:07:14 AM [vite] hmr update /src/components/ui/tabs.tsx
+1:07:14 AM [vite] page reload src/components/ui/textarea.tsx
+1:07:14 AM [vite] hmr update /src/components/ui/theme-provider.tsx
+1:07:14 AM [vite] hmr update /src/components/ui/toast.tsx
+1:07:14 AM [vite] hmr update /src/components/ui/toaster.tsx
+1:07:14 AM [vite] page reload src/components/ui/toggle-group.tsx
+1:07:14 AM [vite] page reload src/components/ui/toggle.tsx
+1:07:14 AM [vite] hmr update /src/components/ui/tooltip.tsx
+1:07:14 AM [vite] hmr update /src/components/csslab/editor-panel.tsx
+1:07:14 AM [vite] hmr update /src/components/csslab/preview-panel.tsx
+1:07:14 AM [vite] hmr update /src/components/csslab/terminal-panel.tsx
+1:07:14 AM [vite] page reload src/hooks/use-mobile.tsx
+1:07:14 AM [vite] hmr update /src/pages/csslab/lab.tsx, /src/pages/csslab/project.tsx
+1:07:14 AM [vite] page reload src/lib/queryClient.ts
+1:07:14 AM [vite] page reload src/lib/utils.ts
+1:07:14 AM [vite] page reload src/pages/about.tsx
+1:07:14 AM [vite] page reload src/pages/ai-generator.tsx
+1:07:14 AM [vite] page reload src/pages/contact.tsx
+1:07:14 AM [vite] page reload src/pages/home.tsx
+1:07:14 AM [vite] hmr update /src/pages/not-found.tsx
+1:07:14 AM [vite] page reload src/pages/portfolio.tsx
+1:07:14 AM [vite] page reload src/pages/services.tsx
+1:07:14 AM [vite] hmr update /src/pages/csslab/home.tsx
+1:07:14 AM [vite] hmr update /src/pages/csslab/lab.tsx
+1:07:14 AM [vite] hmr update /src/pages/csslab/project.tsx
+1:07:14 AM [vite] hmr update /src/pages/csslab/templates.tsx
+1:08:50 AM [vite] changed tsconfig file detected: /app/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+1:08:50 AM [vite] page reload /app/tailwind.config.ts
+1:35:18 AM [vite] changed tsconfig file detected: /app/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+5:57:49 AM [vite] changed tsconfig file detected: /app/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.

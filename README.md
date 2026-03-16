@@ -264,3 +264,38 @@ For technical support or questions, please contact:
 ---
 
 © 2024 Cool Shot Systems. All rights reserved.
+---
+
+## Production Setup & Database Integration (Supabase)
+
+CSSLab uses Supabase as its primary database.
+
+### 1. Database Migrations
+Before deploying or running locally with the database, apply the schema located in `db/schema.sql` to your Supabase project using the Supabase Dashboard's SQL Editor. This will create the required `projects`, `templates`, and `template_requests` tables with Row Level Security (RLS) policies configured for secure client-side access.
+
+### 2. Environment Variables
+Add the following environment variables to your local `.env` file and your Vercel deployment settings:
+
+```env
+# Supabase Configuration
+# For Next.js projects, use NEXT_PUBLIC_...
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+
+# For Vite projects, use VITE_...
+VITE_SUPABASE_URL=your-supabase-project-url
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+
+**Security Note:** Only expose the public `anon` key to the client. Never expose the Supabase Service Role Key. Client-side database actions are securely restricted using Row Level Security (RLS).
+
+### 3. Vercel Deployment
+The repository includes a `vercel.json` file properly configured with:
+- Dynamic SPA rewrites handling client-side routing like `/p/[id]`.
+- Vercel Edge Runtime for any defined API functions (`api/**/*.ts`).
+- Standard web security headers (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`).
+
+To deploy:
+1. Connect your GitHub repository to Vercel.
+2. In the Vercel project settings, add the required Environment Variables.
+3. Deploy! Vercel will automatically use the `vercel.json` configuration to build the client and set up serverless routes.
