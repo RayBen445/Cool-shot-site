@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type ContactInquiry, type InsertContactInquiry } from "@shared/schema";
+import { type User, type InsertUser, type ContactInquiry, type InsertContactInquiry, type Project, type InsertProject } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -7,15 +7,19 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
   createContactInquiry(inquiry: InsertContactInquiry): Promise<ContactInquiry>;
   getContactInquiries(): Promise<ContactInquiry[]>;
+  createProject(project: InsertProject): Promise<Project>;
+  getProject(id: string): Promise<Project | undefined>;
 }
 
 export class MemStorage implements IStorage {
   private users: Map<string, User>;
   private contactInquiries: Map<string, ContactInquiry>;
+  private projects: Map<string, Project>;
 
   constructor() {
     this.users = new Map();
     this.contactInquiries = new Map();
+    this.projects = new Map();
   }
 
   async getUser(id: string): Promise<User | undefined> {
@@ -51,6 +55,24 @@ export class MemStorage implements IStorage {
   async getContactInquiries(): Promise<ContactInquiry[]> {
     return Array.from(this.contactInquiries.values())
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  async createProject(insertProject: InsertProject): Promise<Project> {
+    const id = randomUUID();
+    const project: Project = {
+      ...insertProject,
+      html: insertProject.html || "",
+      css: insertProject.css || "",
+      js: insertProject.js || "",
+      id,
+      createdAt: new Date(),
+    };
+    this.projects.set(id, project);
+    return project;
+  }
+
+  async getProject(id: string): Promise<Project | undefined> {
+    return this.projects.get(id);
   }
 }
 

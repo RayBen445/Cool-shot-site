@@ -9,15 +9,12 @@ export default function Navigation() {
 
   const navigation = [
     { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Services", href: "/services" },
-    { name: "Portfolio", href: "/portfolio" },
-    { name: "AI Generator", href: "/ai-generator" },
-    { name: "Contact", href: "/contact" },
+    { name: "Lab", href: "/lab" },
+    { name: "Templates", href: "/templates" },
   ];
 
   return (
-    <nav className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 shadow-lg sticky top-0 z-50 border-b border-blue-700">
+    <nav className="bg-gray-900 shadow-lg sticky top-0 z-50 border-b border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
@@ -27,10 +24,10 @@ export default function Navigation() {
                   <img 
                     src="/images/logo.jpg" 
                     alt="Cool Shot Systems Logo" 
-                    className="h-10 w-auto object-contain"
+                    className="h-10 w-auto object-contain rounded-md"
                     data-testid="img-logo"
                   />
-                  <h1 className="text-2xl font-bold text-white hidden sm:block">Cool Shot Systems</h1>
+                  <h1 className="text-2xl font-bold text-white hidden sm:block tracking-tight"><span className="text-blue-500">CSS</span>Lab</h1>
                 </div>
               </Link>
             </div>
@@ -42,18 +39,13 @@ export default function Navigation() {
               <Link key={item.name} href={item.href} data-testid={`link-${item.name.toLowerCase().replace(' ', '-')}`}>
                 <span className={`transition-colors duration-200 cursor-pointer ${
                   location === item.href 
-                    ? "text-white font-medium bg-white/20 px-3 py-1 rounded-lg" 
-                    : "text-blue-100 hover:text-white hover:bg-white/10 px-3 py-1 rounded-lg"
+                    ? "text-white font-medium bg-gray-800 px-3 py-1 rounded-lg"
+                    : "text-gray-400 hover:text-white hover:bg-gray-800 px-3 py-1 rounded-lg"
                 }`}>
                   {item.name}
                 </span>
               </Link>
             ))}
-            <Link href="/contact" data-testid="button-get-started">
-              <Button className="bg-white text-blue-600 hover:bg-blue-50 transition-all duration-200 shadow-lg font-semibold">
-                Get Started
-              </Button>
-            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -63,11 +55,12 @@ export default function Navigation() {
               size="sm"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               data-testid="button-mobile-menu"
+              className="hover:bg-gray-800"
             >
               {isMenuOpen ? (
-                <X className="h-6 w-6 text-white" />
+                <X className="h-6 w-6 text-gray-300" />
               ) : (
-                <Menu className="h-6 w-6 text-white" />
+                <Menu className="h-6 w-6 text-gray-300" />
               )}
             </Button>
           </div>
@@ -75,15 +68,15 @@ export default function Navigation() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden pb-4 bg-gradient-to-b from-transparent to-blue-900/20">
+          <div className="md:hidden pb-4 bg-gray-900 border-t border-gray-800 pt-2">
             <div className="flex flex-col space-y-2">
               {navigation.map((item) => (
                 <Link key={item.name} href={item.href} data-testid={`link-mobile-${item.name.toLowerCase().replace(' ', '-')}`}>
                   <span
                     className={`block px-3 py-2 transition-colors duration-200 cursor-pointer rounded-lg mx-2 ${
                       location === item.href 
-                        ? "text-white font-medium bg-white/20" 
-                        : "text-blue-100 hover:text-white hover:bg-white/10"
+                        ? "text-white font-medium bg-gray-800"
+                        : "text-gray-400 hover:text-white hover:bg-gray-800"
                     }`}
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -91,14 +84,6 @@ export default function Navigation() {
                   </span>
                 </Link>
               ))}
-              <Link href="/contact" data-testid="button-mobile-get-started">
-                <Button 
-                  className="bg-white text-blue-600 hover:bg-blue-50 transition-all duration-200 mx-3 mt-2 shadow-lg font-semibold"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Get Started
-                </Button>
-              </Link>
             </div>
           </div>
         )}

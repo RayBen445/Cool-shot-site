@@ -6,32 +6,30 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import AudioPlayer from "@/components/ui/audio-player";
 import ChatWidget from "@/components/ui/chat-widget";
-import Home from "@/pages/home";
-import About from "@/pages/about";
-import Services from "@/pages/services";
-import Portfolio from "@/pages/portfolio";
-import Contact from "@/pages/contact";
-import AIGenerator from "@/pages/ai-generator";
+import Home from "@/pages/csslab/home";
+import Lab from "@/pages/csslab/lab";
+import Templates from "@/pages/csslab/templates";
+import ProjectViewer from "@/pages/csslab/project";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/layout/navigation";
 import Footer from "@/components/layout/footer";
 
 function Router() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-950 text-white">
       <Navigation />
-      <main className="flex-1">
+      <main className="flex-1 overflow-auto flex flex-col">
         <Switch>
           <Route path="/" component={Home} />
-          <Route path="/about" component={About} />
-          <Route path="/services" component={Services} />
-          <Route path="/portfolio" component={Portfolio} />
-          <Route path="/contact" component={Contact} />
-          <Route path="/ai-generator" component={AIGenerator} />
+          <Route path="/lab" component={Lab} />
+          <Route path="/templates" component={Templates} />
+          <Route path="/p/:id" component={ProjectViewer} />
           <Route component={NotFound} />
         </Switch>
       </main>
-      <Footer />
+      <div className="shrink-0">
+        <Footer />
+      </div>
     </div>
   );
 }
@@ -39,7 +37,7 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="light" storageKey="coolshot-theme">
+      <ThemeProvider defaultTheme="dark" storageKey="csslab-theme">
         <TooltipProvider>
           <Toaster />
           <Router />
