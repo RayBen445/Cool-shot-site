@@ -1,24 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "npm ci && npm run build:client",
-  "outputDirectory": "dist/public",
-  "installCommand": "npm ci",
-  "framework": null,
-  "functions": {
-    "api/**/*.ts": {
-      "runtime": "edge"
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
+  "buildCommand": "npm run build",
+  "framework": "nextjs",
   "headers": [
     {
       "source": "/(.*)",
@@ -34,23 +17,6 @@
         {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
-        }
-      ]
-    },
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, POST, PUT, DELETE, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization"
         }
       ]
     }

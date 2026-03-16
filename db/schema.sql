@@ -1,6 +1,7 @@
 -- Create projects table
 CREATE TABLE projects (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid, -- Added for ownership/auth
   html_code text DEFAULT '',
   css_code text DEFAULT '',
   js_code text DEFAULT '',
