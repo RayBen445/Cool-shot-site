@@ -5,16 +5,17 @@ import { useRouter } from "next/navigation";
 import { PlusCircle, ExternalLink, ArrowRight, FolderRoot, Rocket, Code2, CopyPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
-import { getProjectsByUser, getDeploymentsByUser, ProjectData, DeploymentData } from "@/lib/db";
+import { getProjectsByUser, getDeploymentsByUser, listTemplates, ProjectData, DeploymentData } from "@/lib/db";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Dashboard() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [projects, setProjects] = useState<ProjectData[]>([]);
   const [deployments, setDeployments] = useState<DeploymentData[]>([]);
+  const [templatesCount, setTemplatesCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,6 +31,9 @@ export default function Dashboard() {
 
           const userDeployments = await getDeploymentsByUser(userId);
           setDeployments(userDeployments.slice(0, 3)); // Only recent 3
+
+          const templates = await listTemplates();
+          setTemplatesCount(templates.length);
         }
       } catch (err) {
         console.error("Error loading dashboard data:", err);
@@ -105,7 +109,7 @@ export default function Dashboard() {
             <Code2 className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
+            <div className="text-2xl font-bold">{templatesCount}</div>
           </CardContent>
         </Card>
       </div>

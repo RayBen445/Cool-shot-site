@@ -5,10 +5,9 @@ import { nanoid } from 'nanoid';
 
 export async function POST(request: Request) {
   try {
-    const { html, css, js } = await request.json();
+    const { html, css, js, projectId } = await request.json();
 
-    // Verify authentication via the Authorization header or session cookies
-    // For simplicity with Supabase auth in Next.js App Router API, we can parse the token
+    // Verify authentication via the Authorization header
     const authHeader = request.headers.get('Authorization');
 
     if (!authHeader) {
@@ -45,30 +44,14 @@ export async function POST(request: Request) {
     // Generate a unique 6-8 character slug
     const slug = nanoid(7).toLowerCase();
 
-    // Note: To be absolutely robust, you'd check for slug collision in a while loop
-    // But nanoid(7) has very low collision probability for a small app.
-
-    // Save project code
-    const { data: project, error: projectError } = await supabase
-      .from('projects')
-      .insert([{
-        user_id: userId,
-        html_code: html || '',
-        css_code: css || '',
-        js_code: js || ''
-      }])
-      .select()
-      .single();
-
-    if (projectError) {
-      console.error('Error saving project for deployment:', projectError);
-      return new NextResponse('Internal Server Error', { status: 500 });
+    if (!projectId) {
+      return new NextResponse(JSON.stringify({ error: 'Missing projectId' }), { status: 400 });
     }
 
-    // Create deployment record
+    // Create deployment record mapping the extracted html/css/js properties sent from the client
     const deploymentRecord = {
       user_id: userId,
-      project_id: project.id,
+      project_id: projectId,
       slug,
       html_code: html || '',
       css_code: css || '',
