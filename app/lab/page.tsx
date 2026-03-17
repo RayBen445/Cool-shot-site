@@ -6,7 +6,6 @@ import { Play, Share2, Rocket } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 
 import { EditorPanel } from "@/components/csslab/editor-panel";
 import { PreviewPanel } from "@/components/csslab/preview-panel";
@@ -256,42 +255,31 @@ function LabContent() {
       </div>
 
       {/* Main Layout */}
-      <div className="flex-1 min-h-0 h-full">
-        <ResizablePanelGroup direction="horizontal" className="h-full">
-          {/* Editor Panel */}
-          <ResizablePanel defaultSize={45} minSize={20}>
-            <EditorPanel
-              html={html}
-              css={css}
-              js={js}
-              onHtmlChange={setHtml}
-              onCssChange={setCss}
-              onJsChange={setJs}
-            />
-          </ResizablePanel>
+      <div className="flex flex-col lg:flex-row flex-1 min-h-0 overflow-hidden w-full h-full">
+        {/* Editor Panel */}
+        <div className="w-full lg:w-1/3 h-1/3 lg:h-full flex flex-col overflow-hidden">
+          <EditorPanel
+            html={html}
+            css={css}
+            js={js}
+            onHtmlChange={setHtml}
+            onCssChange={setCss}
+            onJsChange={setJs}
+          />
+        </div>
 
-          <ResizableHandle className="bg-gray-800 hover:bg-blue-500 transition-colors w-1" />
+        {/* Preview Panel */}
+        <div className="w-full lg:w-1/3 h-1/3 lg:h-full flex flex-col overflow-hidden border-y lg:border-y-0 lg:border-x border-gray-800">
+          <PreviewPanel srcDoc={srcDoc} />
+        </div>
 
-          {/* Preview & Terminal Right Side */}
-          <ResizablePanel defaultSize={55} minSize={30}>
-            <ResizablePanelGroup direction="vertical">
-              {/* Preview Panel */}
-              <ResizablePanel defaultSize={70} minSize={20}>
-                <PreviewPanel srcDoc={srcDoc} />
-              </ResizablePanel>
-
-              <ResizableHandle className="bg-gray-800 hover:bg-blue-500 transition-colors h-1" />
-
-              {/* Terminal Panel */}
-              <ResizablePanel defaultSize={30} minSize={10}>
-                <TerminalPanel
-                  logs={logs}
-                  onClear={() => setLogs([])}
-                />
-              </ResizablePanel>
-            </ResizablePanelGroup>
-          </ResizablePanel>
-        </ResizablePanelGroup>
+        {/* Terminal Panel */}
+        <div className="w-full lg:w-1/3 h-1/3 lg:h-full flex flex-col overflow-hidden">
+          <TerminalPanel
+            logs={logs}
+            onClear={() => setLogs([])}
+          />
+        </div>
       </div>
     </div>
   );

@@ -18,8 +18,8 @@ export function EditorPanel({
   onJsChange,
 }: EditorPanelProps) {
   return (
-    <div className="h-full flex flex-col bg-gray-950 border-r border-gray-800">
-      <Tabs defaultValue="html" className="flex-1 flex flex-col">
+    <div className="h-full w-full flex flex-col bg-gray-950 overflow-hidden">
+      <Tabs defaultValue="html" className="flex-1 flex flex-col overflow-hidden">
         <div className="bg-gray-900 border-b border-gray-800 px-2">
           <TabsList className="bg-transparent space-x-2 h-10">
             <TabsTrigger
@@ -43,29 +43,29 @@ export function EditorPanel({
           </TabsList>
         </div>
 
-        <TabsContent value="html" className="flex-1 m-0">
+        <TabsContent value="html" className="flex-1 h-full w-full m-0">
           <textarea
             value={html}
             onChange={(e) => onHtmlChange(e.target.value)}
-            className="w-full h-full bg-gray-950 text-gray-300 p-4 font-mono text-sm focus:outline-none resize-none"
+            className="w-full h-full flex-1 bg-gray-950 text-gray-300 p-4 font-mono text-sm focus:outline-none resize-none overflow-auto"
             spellCheck="false"
             placeholder="<!-- Write your HTML here -->"
           />
         </TabsContent>
-        <TabsContent value="css" className="flex-1 m-0">
+        <TabsContent value="css" className="flex-1 h-full w-full m-0">
           <textarea
             value={css}
             onChange={(e) => onCssChange(e.target.value)}
-            className="w-full h-full bg-gray-950 text-gray-300 p-4 font-mono text-sm focus:outline-none resize-none"
+            className="w-full h-full flex-1 bg-gray-950 text-gray-300 p-4 font-mono text-sm focus:outline-none resize-none overflow-auto"
             spellCheck="false"
             placeholder="/* Write your CSS here */"
           />
         </TabsContent>
-        <TabsContent value="js" className="flex-1 m-0">
+        <TabsContent value="js" className="flex-1 h-full w-full m-0">
           <textarea
             value={js}
             onChange={(e) => onJsChange(e.target.value)}
-            className="w-full h-full bg-gray-950 text-gray-300 p-4 font-mono text-sm focus:outline-none resize-none"
+            className="w-full h-full flex-1 bg-gray-950 text-gray-300 p-4 font-mono text-sm focus:outline-none resize-none overflow-auto"
             spellCheck="false"
             placeholder="// Write your JavaScript here"
           />
