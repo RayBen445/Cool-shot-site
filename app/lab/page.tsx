@@ -221,9 +221,12 @@ function LabContent() {
       {/* Toolbar */}
       <div className="bg-gray-900 border-b border-gray-800 p-3 flex justify-between items-center shrink-0">
         <div className="flex items-center space-x-4">
-          <div className="text-gray-300 font-medium px-2 text-lg">CodingLab</div>
+          <Link href="/account/projects" className="text-blue-400 hover:text-blue-300 flex items-center text-sm transition-colors">
+            ← Projects
+          </Link>
+          <div className="text-gray-300 font-medium px-2 text-lg">CSSLab</div>
           <span className="text-xs px-2 py-1 bg-gray-800 rounded text-gray-400 border border-gray-700">
-            CSSLab | Built by Cool Shot Systems
+            Code Editor
           </span>
         </div>
         <div className="flex space-x-2">

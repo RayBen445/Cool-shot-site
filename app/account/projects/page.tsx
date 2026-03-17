@@ -8,24 +8,25 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Trash2, ExternalLink, ArrowLeft, Copy } from "lucide-react";
+import { Trash2, Code2, ArrowLeft } from "lucide-react";
 
-interface Deployment {
+interface Project {
   id: string;
-  slug: string;
+  html_code: string;
+  css_code: string;
+  js_code: string;
   created_at: string;
 }
 
-function DeploymentsContent() {
-  const [deployments, setDeployments] = useState<Deployment[]>([]);
+function ProjectsContent() {
+  const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
   const router = useRouter();
   const { toast } = useToast();
 
   useEffect(() => {
-    const fetchDeployments = async () => {
+    const fetchProjects = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         
@@ -35,17 +36,17 @@ function DeploymentsContent() {
         }
 
         const { data, error } = await supabase
-          .from("deployments")
+          .from("projects")
           .select("*")
           .eq("user_id", session.user.id)
           .order("created_at", { ascending: false });
 
         if (error) throw error;
-        setDeployments(data || []);
+        setProjects(data || []);
       } catch (error: any) {
         toast({
           title: "Error",
-          description: error.message || "Failed to load deployments",
+          description: error.message || "Failed to load projects",
           variant: "destructive",
         });
       } finally {
@@ -53,7 +54,7 @@ function DeploymentsContent() {
       }
     };
 
-    fetchDeployments();
+    fetchProjects();
   }, []);
 
   const handleDelete = async () => {
@@ -61,34 +62,25 @@ function DeploymentsContent() {
 
     try {
       const { error } = await supabase
-        .from("deployments")
+        .from("projects")
         .delete()
         .eq("id", deleteId);
 
       if (error) throw error;
 
-      setDeployments(deployments.filter(d => d.id !== deleteId));
+      setProjects(projects.filter(p => p.id !== deleteId));
       setDeleteId(null);
       toast({
-        title: "Deployment deleted",
-        description: "Your deployment has been removed.",
+        title: "Project deleted",
+        description: "Your project has been removed.",
       });
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message || "Failed to delete deployment",
+        description: error.message || "Failed to delete project",
         variant: "destructive",
       });
     }
-  };
-
-  const deploymentUrl = (slug: string) => `${window.location.origin}/deploy/${slug}`;
-
-  const copyToClipboard = (slug: string) => {
-    const url = deploymentUrl(slug);
-    navigator.clipboard.writeText(url);
-    setCopiedUrl(slug);
-    setTimeout(() => setCopiedUrl(null), 2000);
   };
 
   return (
@@ -102,19 +94,25 @@ function DeploymentsContent() {
                 Back to Account
               </button>
             </Link>
-            <h1 className="text-3xl font-bold">Deployments</h1>
-            <p className="text-gray-400 mt-2">All your live deployments</p>
+            <h1 className="text-3xl font-bold">Your Projects</h1>
+            <p className="text-gray-400 mt-2">Manage all your saved projects</p>
           </div>
+          <Link href="/lab">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Code2 className="w-4 h-4 mr-2" />
+              New Project
+            </Button>
+          </Link>
         </div>
 
         {isLoading ? (
-          <div className="text-gray-400 text-center py-12">Loading deployments...</div>
-        ) : deployments.length === 0 ? (
+          <div className="text-gray-400 text-center py-12">Loading projects...</div>
+        ) : projects.length === 0 ? (
           <Card className="bg-gray-900 border-gray-800 text-center py-12">
             <CardContent>
-              <ExternalLink className="w-16 h-16 text-gray-700 mx-auto mb-4" />
-              <p className="text-gray-400 mb-4">No deployments yet</p>
-              <p className="text-gray-500 mb-6">Deploy your projects to get live URLs</p>
+              <Code2 className="w-16 h-16 text-gray-700 mx-auto mb-4" />
+              <p className="text-gray-400 mb-4">No projects yet</p>
+              <p className="text-gray-500 mb-6">Start creating your first project in the Lab</p>
               <Link href="/lab">
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                   Go to Lab
@@ -123,40 +121,26 @@ function DeploymentsContent() {
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-4">
-            {deployments.map((deployment) => (
-              <Card key={deployment.id} className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-colors">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg font-mono break-all">{deployment.slug}</CardTitle>
-                      <CardDescription className="text-gray-400 mt-1">
-                        Deployed {new Date(deployment.created_at).toLocaleDateString()} at {new Date(deployment.created_at).toLocaleTimeString()}
-                      </CardDescription>
-                    </div>
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {projects.map((project) => (
+              <Card key={project.id} className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-colors">
+                <CardHeader>
+                  <CardTitle className="text-lg line-clamp-2">Project {project.id.slice(0, 8)}</CardTitle>
+                  <CardDescription className="text-gray-400">
+                    {new Date(project.created_at).toLocaleDateString()}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="flex gap-2">
-                    <Link href={deploymentUrl(deployment.slug)} target="_blank" className="flex-1">
-                      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        Visit Deployment
+                    <Link href={`/lab?projectId=${project.id}`} className="flex-1">
+                      <Button variant="outline" className="w-full bg-gray-800 border-gray-700 hover:bg-gray-700 text-white">
+                        Open
                       </Button>
                     </Link>
                     <Button
                       variant="outline"
-                      onClick={() => copyToClipboard(deployment.slug)}
-                      className={`bg-gray-800 border-gray-700 hover:bg-gray-700 text-white ${
-                        copiedUrl === deployment.slug ? "bg-green-600/30 border-green-600/50" : ""
-                      }`}
-                    >
-                      <Copy className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
                       size="sm"
-                      onClick={() => setDeleteId(deployment.id)}
+                      onClick={() => setDeleteId(project.id)}
                       className="bg-red-900/20 border-red-900/50 hover:bg-red-900/30 text-red-400"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -172,9 +156,9 @@ function DeploymentsContent() {
       <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
         <AlertDialogContent className="bg-gray-900 border-gray-800 text-white">
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete deployment?</AlertDialogTitle>
+            <AlertDialogTitle>Delete project?</AlertDialogTitle>
             <AlertDialogDescription className="text-gray-400">
-              This action cannot be undone. The deployment will be removed and the URL will no longer be accessible.
+              This action cannot be undone. The project will be permanently deleted.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex gap-2 justify-end">
@@ -194,10 +178,10 @@ function DeploymentsContent() {
   );
 }
 
-export default function Deployments() {
+export default function Projects() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-gray-950 flex items-center justify-center text-white">Loading...</div>}>
-      <DeploymentsContent />
+      <ProjectsContent />
     </Suspense>
   );
 }
