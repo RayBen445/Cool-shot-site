@@ -147,6 +147,8 @@ function LabContent() {
           description: "You must be logged in to deploy projects.",
           variant: "destructive",
         });
+
+        router.push("/auth/login?redirect=/lab");
         return;
       }
 
