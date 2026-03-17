@@ -1,5 +1,8 @@
 import { supabase } from '../supabase'
 
+// Admin email whitelist
+const ADMIN_EMAILS = ['admin@csslab.zone.id', 'oladoyeheritage445@gmail.com']
+
 export interface ProjectData {
   user_id?: string;
   html_code: string;
@@ -240,16 +243,15 @@ export interface UserNotification {
 }
 
 /**
- * Check if a user is an admin
+ * Check if a user is an admin by email
  */
-export async function isUserAdmin(userId: string): Promise<boolean> {
-  const { data, error } = await supabase
-    .from('admin_users')
-    .select('id')
-    .eq('user_id', userId)
-    .single()
-
-  return !error && !!data
+export async function isUserAdmin(userEmail?: string): Promise<boolean> {
+  if (!userEmail) {
+    const { data: { user } } = await supabase.auth.getUser()
+    userEmail = user?.email || ''
+  }
+  
+  return ADMIN_EMAILS.includes(userEmail.toLowerCase())
 }
 
 /**
