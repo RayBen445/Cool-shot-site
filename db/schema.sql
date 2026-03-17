@@ -69,3 +69,8 @@ CREATE POLICY "Enable insert access for authenticated users on deployments" ON d
 
 -- Allow authenticated users to delete their own deployments
 CREATE POLICY "Enable delete access for authenticated users on deployments" ON deployments FOR DELETE USING (auth.uid() = user_id);
+ALTER TABLE projects ADD COLUMN title text;
+ALTER TABLE projects ADD COLUMN description text;
+ALTER TABLE projects ADD COLUMN files jsonb;
+ALTER TABLE projects ADD COLUMN readme text;
+ALTER TABLE projects ADD COLUMN updated_at timestamp with time zone DEFAULT timezone('utc'::text, now());

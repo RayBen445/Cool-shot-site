@@ -1,10 +1,17 @@
 import { supabase } from '../supabase'
 
 export interface ProjectData {
+  id?: string;
   user_id?: string;
-  html_code: string;
-  css_code: string;
-  js_code: string;
+  title?: string;
+  description?: string;
+  files?: Record<string, string>;
+  readme?: string;
+  html_code?: string;
+  css_code?: string;
+  js_code?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface TemplateData {
@@ -30,9 +37,10 @@ export interface TemplateRequestData {
  * Save a new project to the database
  */
 export async function saveProject(project: ProjectData) {
+  // If id is provided, we do an upsert
   const { data, error } = await supabase
     .from('projects')
-    .insert([project])
+    .upsert([project], { onConflict: 'id' })
     .select()
     .single()
 
@@ -41,6 +49,24 @@ export async function saveProject(project: ProjectData) {
     throw error
   }
 
+  return data
+}
+
+/**
+ * Update project
+ */
+export async function updateProject(id: string, updates: Partial<ProjectData>) {
+  const { data, error } = await supabase
+    .from('projects')
+    .update({ ...updates, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) {
+    console.error(`Error updating project ${id}:`, error)
+    throw error
+  }
   return data
 }
 
@@ -60,6 +86,40 @@ export async function getProjectById(id: string) {
   }
 
   return data
+}
+
+/**
+ * List all projects for a user
+ */
+export async function getProjectsByUser(userId: string) {
+  const { data, error } = await supabase
+    .from('projects')
+    .select('*')
+    .eq('user_id', userId)
+    .order('updated_at', { ascending: false, nullsFirst: false })
+
+  // fallback ordering by created_at if updated_at is null
+  if (error) {
+    console.error(`Error fetching projects for user ${userId}:`, error)
+    throw error
+  }
+  return data as ProjectData[]
+}
+
+/**
+ * Delete a project by ID
+ */
+export async function deleteProject(id: string) {
+  const { error } = await supabase
+    .from('projects')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    console.error(`Error deleting project ${id}:`, error)
+    throw error
+  }
+  return true
 }
 
 /**
@@ -168,7 +228,7 @@ export async function getDeploymentBySlug(slug: string) {
 export async function getDeploymentsByUser(userId: string) {
   const { data, error } = await supabase
     .from('deployments')
-    .select('*')
+    .select('*, projects(title)')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
 
