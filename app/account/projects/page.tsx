@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { PlusCircle, Search, FolderRoot, Trash2, Edit2, Play, AlertTriangle } from "lucide-react";
+import { PlusCircle, Search, FolderRoot, Trash2, Edit2, Play, AlertTriangle, Type } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
-import { getProjectsByUser, deleteProject, ProjectData } from "@/lib/db";
+import { getProjectsByUser, deleteProject, updateProject, ProjectData } from "@/lib/db";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
@@ -21,6 +21,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -35,7 +43,12 @@ export default function ProjectsPage() {
   const [projects, setProjects] = useState<ProjectData[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+
+  // Modals state
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [renamingId, setRenamingId] = useState<string | null>(null);
+  const [newName, setNewName] = useState("");
+  const [isRenaming, setIsRenaming] = useState(false);
 
   useEffect(() => {
     async function loadProjects() {
@@ -72,6 +85,37 @@ export default function ProjectsPage() {
       });
     } finally {
       setDeletingId(null);
+    }
+  };
+
+  const openRenameDialog = (id: string, currentTitle: string) => {
+    setRenamingId(id);
+    setNewName(currentTitle || "Untitled Project");
+  };
+
+  const handleRename = async () => {
+    if (!renamingId) return;
+
+    try {
+      setIsRenaming(true);
+      const updatedProject = await updateProject(renamingId, { title: newName });
+
+      setProjects(projects.map(p => p.id === renamingId ? { ...p, title: newName, updated_at: updatedProject.updated_at } : p));
+
+      toast({
+        title: "Project renamed",
+        description: "Your project has been successfully renamed.",
+      });
+
+      setRenamingId(null);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to rename project. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsRenaming(false);
     }
   };
 
@@ -112,6 +156,34 @@ export default function ProjectsPage() {
         />
       </div>
 
+      {/* Rename Dialog */}
+      <Dialog open={!!renamingId} onOpenChange={(open) => !open && setRenamingId(null)}>
+        <DialogContent className="bg-gray-900 border border-gray-800 text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Rename Project</DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Enter a new name for your project.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <input
+              type="text"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleRename()}
+              autoFocus
+              className="w-full bg-gray-950 border border-gray-800 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" className="text-gray-400 hover:text-white" onClick={() => setRenamingId(null)}>Cancel</Button>
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={handleRename} disabled={isRenaming || !newName.trim()}>
+              {isRenaming ? "Renaming..." : "Save Changes"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {filteredProjects.length === 0 ? (
         <div className="bg-gray-900/50 border border-gray-800 border-dashed rounded-xl p-12 text-center">
           <FolderRoot className="h-12 w-12 text-gray-600 mx-auto mb-4" />
@@ -151,6 +223,9 @@ export default function ProjectsPage() {
                       <DropdownMenuSeparator className="bg-gray-800" />
                       <DropdownMenuItem onClick={() => router.push(`/lab?projectId=${project.id}`)} className="cursor-pointer focus:bg-gray-800 focus:text-white">
                         <Edit2 className="mr-2 h-4 w-4" /> Edit Code
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => openRenameDialog(project.id!, project.title!)} className="cursor-pointer focus:bg-gray-800 focus:text-white">
+                        <Type className="mr-2 h-4 w-4" /> Rename
                       </DropdownMenuItem>
                       <DropdownMenuSeparator className="bg-gray-800" />
                       <AlertDialog>
