@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
-import { createDeployment } from '@/lib/db';
+import { createDeployment, getUserCredits, initializeUserCredits, deductCredits } from '@/lib/db';
 import { nanoid } from 'nanoid';
 
 export async function POST(request: Request) {
@@ -24,22 +24,43 @@ export async function POST(request: Request) {
 
     const userId = user.id;
 
-    // Check rate limits: maximum 10 deployments per user per day
-    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-
-    const { count, error: countError } = await supabase
-      .from('deployments')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .gte('created_at', oneDayAgo);
-
-    if (countError) {
-      console.error('Error checking rate limit:', countError);
-      return new NextResponse('Internal Server Error', { status: 500 });
+    // Check or initialize user credits
+    let userCredits = await getUserCredits(userId);
+    if (!userCredits) {
+      userCredits = await initializeUserCredits(userId, 5); // Start with 5 free credits
     }
 
-    if (count && count >= 10) {
-      return new NextResponse(JSON.stringify({ error: 'Rate limit exceeded: Max 10 deployments per day' }), { status: 429 });
+    // Check if user has unlimited credits
+    if (!userCredits.unlimited) {
+      // Check rate limits: maximum 10 deployments per user per day
+      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
+      const { count, error: countError } = await supabase
+        .from('deployments')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .gte('created_at', oneDayAgo);
+
+      if (countError) {
+        console.error('Error checking rate limit:', countError);
+        return new NextResponse('Internal Server Error', { status: 500 });
+      }
+
+      if (count && count >= 10) {
+        return new NextResponse(JSON.stringify({ error: 'Rate limit exceeded: Max 10 deployments per day' }), { status: 429 });
+      }
+
+      // Deduct 1 credit for deployment
+      if (userCredits.credits < 1) {
+        return new NextResponse(JSON.stringify({ error: 'Insufficient credits. You need at least 1 credit to deploy.' }), { status: 402 });
+      }
+
+      try {
+        await deductCredits(userId, 1, 'Deployment created');
+      } catch (creditError) {
+        console.error('Error deducting credits:', creditError);
+        return new NextResponse('Error processing credits', { status: 500 });
+      }
     }
 
     // Generate a unique 6-8 character slug
@@ -83,7 +104,8 @@ export async function POST(request: Request) {
       success: true,
       deployment: newDeployment,
       url,
-      slug
+      slug,
+      creditsRemaining: userCredits.unlimited ? -1 : userCredits.credits - 1
     });
   } catch (error) {
     console.error('Deploy error:', error);

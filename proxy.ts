@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const url = request.nextUrl.clone();
 
   // Get hostname from request headers
@@ -27,6 +27,9 @@ export function middleware(request: NextRequest) {
 
   return NextResponse.next();
 }
+
+// Also export as default for Next.js 16 compatibility
+export default proxy;
 
 export const config = {
   matcher: [
