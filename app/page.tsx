@@ -47,6 +47,18 @@ export default function Home() {
               </Button>
             </Link>
           </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-4">
+            <Link href="/auth/login" passHref legacyBehavior>
+              <Button variant="outline" size="lg" className="bg-transparent border-gray-600 hover:bg-gray-800 text-gray-300 hover:text-white px-8 py-6 h-auto text-lg w-full sm:w-auto">
+                Sign In
+              </Button>
+            </Link>
+            <Link href="/auth/signup" passHref legacyBehavior>
+              <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 h-auto text-lg w-full sm:w-auto shadow-lg shadow-purple-500/20">
+                Create Account
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -94,7 +106,7 @@ export default function Home() {
                 </p>
               </CardContent>
             </Card>
-          </div>
+                    </div>
         </div>
       </section>
     </div>
