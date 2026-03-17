@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export default function proxy(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const url = request.nextUrl.clone()
   const hostname = request.headers.get('host') || ''
   
-  // Extract subdomain for deployment routing
   let subdomain = ''
   
   if (hostname.includes('.csslab.zone.id')) {
@@ -14,7 +13,6 @@ export default function proxy(request: NextRequest) {
     subdomain = hostname.split('.')[0]
   }
   
-  // Route subdomain requests to deployment pages
   if (subdomain && subdomain !== 'www' && subdomain !== 'localhost') {
     url.pathname = `/deploy/${subdomain}`
     return NextResponse.rewrite(url)

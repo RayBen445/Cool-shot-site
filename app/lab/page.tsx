@@ -293,7 +293,7 @@ function LabContent() {
 
 export default function Lab() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-950 flex items-center justify-center text-white">Loading CodingLab...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-gray-950 flex items-center justify-center text-white">Loading Lab...</div>}>
       <LabContent />
     </Suspense>
   )
