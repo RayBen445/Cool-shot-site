@@ -1,5 +1,5 @@
 -- Create projects table
-CREATE TABLE projects (
+CREATE TABLE IF NOT EXISTS projects (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid, -- Added for ownership/auth
   html_code text DEFAULT '',
@@ -8,8 +8,42 @@ CREATE TABLE projects (
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+-- Add new columns safely using a DO block to avoid 'already exists' error
+DO $$
+BEGIN
+  BEGIN
+    ALTER TABLE projects ADD COLUMN title text;
+  EXCEPTION
+    WHEN duplicate_column THEN null;
+  END;
+
+  BEGIN
+    ALTER TABLE projects ADD COLUMN description text;
+  EXCEPTION
+    WHEN duplicate_column THEN null;
+  END;
+
+  BEGIN
+    ALTER TABLE projects ADD COLUMN files jsonb;
+  EXCEPTION
+    WHEN duplicate_column THEN null;
+  END;
+
+  BEGIN
+    ALTER TABLE projects ADD COLUMN readme text;
+  EXCEPTION
+    WHEN duplicate_column THEN null;
+  END;
+
+  BEGIN
+    ALTER TABLE projects ADD COLUMN updated_at timestamp with time zone DEFAULT timezone('utc'::text, now());
+  EXCEPTION
+    WHEN duplicate_column THEN null;
+  END;
+END $$;
+
 -- Create templates table
-CREATE TABLE templates (
+CREATE TABLE IF NOT EXISTS templates (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
   description text,
@@ -22,7 +56,7 @@ CREATE TABLE templates (
 );
 
 -- Create template_requests table
-CREATE TABLE template_requests (
+CREATE TABLE IF NOT EXISTS template_requests (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   template_id uuid REFERENCES templates(id) ON DELETE CASCADE,
   name text NOT NULL,
@@ -31,10 +65,33 @@ CREATE TABLE template_requests (
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- Enable Row Level Security (RLS)
-ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
-ALTER TABLE templates ENABLE ROW LEVEL SECURITY;
-ALTER TABLE template_requests ENABLE ROW LEVEL SECURITY;
+-- Enable Row Level Security (RLS) safely
+DO $$
+BEGIN
+  ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+EXCEPTION
+  WHEN undefined_object THEN null;
+END $$;
+
+DO $$
+BEGIN
+  ALTER TABLE templates ENABLE ROW LEVEL SECURITY;
+EXCEPTION
+  WHEN undefined_object THEN null;
+END $$;
+
+DO $$
+BEGIN
+  ALTER TABLE template_requests ENABLE ROW LEVEL SECURITY;
+EXCEPTION
+  WHEN undefined_object THEN null;
+END $$;
+
+-- Drop existing policies if they exist, then recreate them
+DROP POLICY IF EXISTS "Enable read access for all users on projects" ON projects;
+DROP POLICY IF EXISTS "Enable insert access for all users on projects" ON projects;
+DROP POLICY IF EXISTS "Enable read access for all users on templates" ON templates;
+DROP POLICY IF EXISTS "Enable insert access for all users on template_requests" ON template_requests;
 
 -- Allow public read/insert access for projects
 CREATE POLICY "Enable read access for all users on projects" ON projects FOR SELECT USING (true);
@@ -47,7 +104,7 @@ CREATE POLICY "Enable read access for all users on templates" ON templates FOR S
 CREATE POLICY "Enable insert access for all users on template_requests" ON template_requests FOR INSERT WITH CHECK (true);
 
 -- Create deployments table
-CREATE TABLE deployments (
+CREATE TABLE IF NOT EXISTS deployments (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid, -- Required for auth
   project_id uuid REFERENCES projects(id) ON DELETE CASCADE,
@@ -59,7 +116,16 @@ CREATE TABLE deployments (
 );
 
 -- Enable RLS for deployments
-ALTER TABLE deployments ENABLE ROW LEVEL SECURITY;
+DO $$
+BEGIN
+  ALTER TABLE deployments ENABLE ROW LEVEL SECURITY;
+EXCEPTION
+  WHEN undefined_object THEN null;
+END $$;
+
+DROP POLICY IF EXISTS "Enable read access for all users on deployments" ON deployments;
+DROP POLICY IF EXISTS "Enable insert access for authenticated users on deployments" ON deployments;
+DROP POLICY IF EXISTS "Enable delete access for authenticated users on deployments" ON deployments;
 
 -- Allow public read access for deployments by slug
 CREATE POLICY "Enable read access for all users on deployments" ON deployments FOR SELECT USING (true);

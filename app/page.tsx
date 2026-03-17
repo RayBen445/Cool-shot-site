@@ -1,11 +1,38 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Code2, LayoutTemplate, Share2, Terminal } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function Home() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        router.replace("/account");
+      } else {
+        setLoading(false);
+      }
+    };
+
+    checkSession();
+  }, [router]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center text-white">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-950 text-white flex flex-col">
       {/* Hero Section */}
@@ -106,7 +133,7 @@ export default function Home() {
                 </p>
               </CardContent>
             </Card>
-                    </div>
+          </div>
         </div>
       </section>
     </div>

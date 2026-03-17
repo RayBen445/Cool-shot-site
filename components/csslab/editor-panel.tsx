@@ -1,76 +1,43 @@
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useEffect, useRef } from "react";
 
 interface EditorPanelProps {
-  html: string;
-  css: string;
-  js: string;
-  onHtmlChange: (val: string) => void;
-  onCssChange: (val: string) => void;
-  onJsChange: (val: string) => void;
+  activeFile: string;
+  content: string;
+  onChange: (val: string) => void;
 }
 
 export function EditorPanel({
-  html,
-  css,
-  js,
-  onHtmlChange,
-  onCssChange,
-  onJsChange,
+  activeFile,
+  content,
+  onChange,
 }: EditorPanelProps) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [activeFile]);
+
+  let placeholder = "<!-- Write your HTML here -->";
+  if (activeFile.endsWith(".css")) placeholder = "/* Write your CSS here */";
+  else if (activeFile.endsWith(".js")) placeholder = "// Write your JavaScript here";
+  else if (activeFile.endsWith(".md")) placeholder = "# Markdown Content Here";
+
   return (
     <div className="h-full w-full flex flex-col bg-gray-950 overflow-hidden">
-      <Tabs defaultValue="html" className="flex-1 flex flex-col overflow-hidden">
-        <div className="bg-gray-900 border-b border-gray-800 px-2">
-          <TabsList className="bg-transparent space-x-2 h-10">
-            <TabsTrigger
-              value="html"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-white text-gray-400 font-mono text-sm px-4 py-1.5"
-            >
-              HTML
-            </TabsTrigger>
-            <TabsTrigger
-              value="css"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-white text-gray-400 font-mono text-sm px-4 py-1.5"
-            >
-              CSS
-            </TabsTrigger>
-            <TabsTrigger
-              value="js"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-white text-gray-400 font-mono text-sm px-4 py-1.5"
-            >
-              JS
-            </TabsTrigger>
-          </TabsList>
-        </div>
+      <div className="bg-gray-900 border-b border-gray-800 px-4 py-2 flex items-center justify-between">
+        <span className="text-gray-400 font-mono text-sm">{activeFile}</span>
+      </div>
 
-        <TabsContent value="html" className="flex-1 h-full w-full m-0">
-          <textarea
-            value={html}
-            onChange={(e) => onHtmlChange(e.target.value)}
-            className="w-full h-full flex-1 bg-gray-950 text-gray-300 p-4 font-mono text-sm focus:outline-none resize-none overflow-auto"
-            spellCheck="false"
-            placeholder="<!-- Write your HTML here -->"
-          />
-        </TabsContent>
-        <TabsContent value="css" className="flex-1 h-full w-full m-0">
-          <textarea
-            value={css}
-            onChange={(e) => onCssChange(e.target.value)}
-            className="w-full h-full flex-1 bg-gray-950 text-gray-300 p-4 font-mono text-sm focus:outline-none resize-none overflow-auto"
-            spellCheck="false"
-            placeholder="/* Write your CSS here */"
-          />
-        </TabsContent>
-        <TabsContent value="js" className="flex-1 h-full w-full m-0">
-          <textarea
-            value={js}
-            onChange={(e) => onJsChange(e.target.value)}
-            className="w-full h-full flex-1 bg-gray-950 text-gray-300 p-4 font-mono text-sm focus:outline-none resize-none overflow-auto"
-            spellCheck="false"
-            placeholder="// Write your JavaScript here"
-          />
-        </TabsContent>
-      </Tabs>
+      <textarea
+        ref={textareaRef}
+        value={content}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full h-full flex-1 bg-gray-950 text-gray-300 p-4 font-mono text-sm focus:outline-none resize-none overflow-auto"
+        spellCheck="false"
+        placeholder={placeholder}
+      />
     </div>
   );
 }

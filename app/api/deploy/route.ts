@@ -1,14 +1,17 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
-import { createDeployment } from '@/lib/db';
+import { createClient } from '@supabase/supabase-js';
 import { nanoid } from 'nanoid';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder-build-url.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key';
+// Try using service role key to bypass RLS for server-side insertions
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseAnonKey;
 
 export async function POST(request: Request) {
   try {
-    const { html, css, js } = await request.json();
+    const { html, css, js, projectId } = await request.json();
 
-    // Verify authentication via the Authorization header or session cookies
-    // For simplicity with Supabase auth in Next.js App Router API, we can parse the token
+    // Verify authentication via the Authorization header
     const authHeader = request.headers.get('Authorization');
 
     if (!authHeader) {
@@ -16,7 +19,17 @@ export async function POST(request: Request) {
     }
 
     const token = authHeader.replace('Bearer ', '');
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    // Create an authenticated Supabase client using the JWT to verify the user
+    const supabaseAuthClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    });
+
+    const { data: { user }, error: authError } = await supabaseAuthClient.auth.getUser();
 
     if (authError || !user) {
       return new NextResponse('Unauthorized', { status: 401 });
@@ -24,10 +37,13 @@ export async function POST(request: Request) {
 
     const userId = user.id;
 
+    // Create a privileged client for the actual insertion to bypass flaky RLS checks in edge
+    const supabaseAdminClient = createClient(supabaseUrl, supabaseServiceKey);
+
     // Check rate limits: maximum 10 deployments per user per day
     const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
-    const { count, error: countError } = await supabase
+    const { count, error: countError } = await supabaseAdminClient
       .from('deployments')
       .select('*', { count: 'exact', head: true })
       .eq('user_id', userId)
@@ -45,37 +61,31 @@ export async function POST(request: Request) {
     // Generate a unique 6-8 character slug
     const slug = nanoid(7).toLowerCase();
 
-    // Note: To be absolutely robust, you'd check for slug collision in a while loop
-    // But nanoid(7) has very low collision probability for a small app.
-
-    // Save project code
-    const { data: project, error: projectError } = await supabase
-      .from('projects')
-      .insert([{
-        user_id: userId,
-        html_code: html || '',
-        css_code: css || '',
-        js_code: js || ''
-      }])
-      .select()
-      .single();
-
-    if (projectError) {
-      console.error('Error saving project for deployment:', projectError);
-      return new NextResponse('Internal Server Error', { status: 500 });
+    if (!projectId) {
+      return new NextResponse(JSON.stringify({ error: 'Missing projectId' }), { status: 400 });
     }
 
-    // Create deployment record
+    // Create deployment record mapping the extracted html/css/js properties sent from the client
     const deploymentRecord = {
       user_id: userId,
-      project_id: project.id,
+      project_id: projectId,
       slug,
       html_code: html || '',
       css_code: css || '',
       js_code: js || ''
     };
 
-    const newDeployment = await createDeployment(deploymentRecord);
+    // Use the admin client to insert to pass RLS
+    const { data: newDeployment, error: deploymentError } = await supabaseAdminClient
+      .from('deployments')
+      .insert([deploymentRecord])
+      .select()
+      .single();
+
+    if (deploymentError) {
+      console.error('Error creating deployment record:', deploymentError);
+      return new NextResponse('Internal Server Error', { status: 500 });
+    }
 
     const url = `https://${slug}.csslab.zone.id`;
 

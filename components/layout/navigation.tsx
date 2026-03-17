@@ -39,11 +39,20 @@ export default function Navigation() {
     router.refresh();
   };
 
-  const navigation = [
-    { name: "Home", href: "/" },
-    { name: "Lab", href: "/lab" },
-    { name: "Templates", href: "/templates" },
-  ];
+  const getNavigation = () => {
+    const baseNav = [
+      { name: "Lab", href: "/lab" },
+      { name: "Templates", href: "/templates" },
+    ];
+
+    // Add Dashboard as the first item if signed in, otherwise Home
+    if (session) {
+      return [{ name: "Dashboard", href: "/account" }, ...baseNav];
+    }
+    return [{ name: "Home", href: "/" }, ...baseNav];
+  };
+
+  const navigation = getNavigation();
 
   return (
     <nav className="bg-gray-900 shadow-lg sticky top-0 z-50 border-b border-gray-800">
@@ -51,7 +60,7 @@ export default function Navigation() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <Link href="/" data-testid="link-home">
+              <Link href={session ? "/account" : "/"} data-testid="link-home">
                 <div className="flex items-center space-x-3 cursor-pointer">
                   <img 
                     src="/images/logo.jpg" 
@@ -70,7 +79,7 @@ export default function Navigation() {
             {navigation.map((item) => (
               <Link key={item.name} href={item.href} data-testid={`link-${item.name.toLowerCase().replace(' ', '-')}`}>
                 <span className={`transition-colors duration-200 cursor-pointer ${
-                  pathname === item.href
+                  pathname === item.href || (item.href === "/account" && pathname.startsWith("/account"))
                     ? "text-white font-medium bg-gray-800 px-3 py-1 rounded-lg"
                     : "text-gray-400 hover:text-white hover:bg-gray-800 px-3 py-1 rounded-lg"
                 }`}>
@@ -96,6 +105,9 @@ export default function Navigation() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-gray-800" />
+                  <DropdownMenuItem asChild className="cursor-pointer focus:bg-gray-800 focus:text-white">
+                     <Link href="/account/settings">Settings</Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleSignOut} className="text-red-400 focus:bg-gray-800 focus:text-red-300 cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
@@ -151,7 +163,7 @@ export default function Navigation() {
                 <Link key={item.name} href={item.href} data-testid={`link-mobile-${item.name.toLowerCase().replace(' ', '-')}`}>
                   <span
                     className={`block px-3 py-2 transition-colors duration-200 cursor-pointer rounded-lg mx-2 ${
-                      pathname === item.href
+                      pathname === item.href || (item.href === "/account" && pathname.startsWith("/account"))
                         ? "text-white font-medium bg-gray-800"
                         : "text-gray-400 hover:text-white hover:bg-gray-800"
                     }`}
@@ -167,6 +179,11 @@ export default function Navigation() {
                   <div className="px-4 py-2 border-t border-gray-800 mt-2">
                     <p className="text-sm text-gray-400 truncate">{session.user.email}</p>
                   </div>
+                  <Link href="/account/settings" onClick={() => setIsMenuOpen(false)}>
+                    <span className="block px-5 py-2 transition-colors duration-200 cursor-pointer rounded-lg mx-2 text-gray-400 hover:text-white hover:bg-gray-800">
+                      Settings
+                    </span>
+                  </Link>
                   <button
                     onClick={() => {
                       handleSignOut();
