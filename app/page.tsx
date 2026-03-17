@@ -34,13 +34,13 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/lab" asChild>
+            <Link href="/lab">
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 h-auto text-lg w-full sm:w-auto shadow-lg shadow-blue-500/20">
                 <Terminal className="mr-2 h-5 w-5" />
                 Start Coding
               </Button>
             </Link>
-            <Link href="/templates" asChild>
+            <Link href="/templates">
               <Button variant="outline" size="lg" className="bg-gray-900 border-gray-700 hover:bg-gray-800 text-gray-300 hover:text-white px-8 py-6 h-auto text-lg w-full sm:w-auto">
                 <LayoutTemplate className="mr-2 h-5 w-5" />
                 Browse Templates
@@ -48,12 +48,12 @@ export default function Home() {
             </Link>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-4">
-            <Link href="/auth/login" asChild>
+            <Link href="/auth/login">
               <Button variant="outline" size="lg" className="bg-transparent border-gray-600 hover:bg-gray-800 text-gray-300 hover:text-white px-8 py-6 h-auto text-lg w-full sm:w-auto">
                 Sign In
               </Button>
             </Link>
-            <Link href="/auth/signup" asChild>
+            <Link href="/auth/signup">
               <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 h-auto text-lg w-full sm:w-auto shadow-lg shadow-purple-500/20">
                 Create Account
               </Button>
