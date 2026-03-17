@@ -45,3 +45,27 @@ CREATE POLICY "Enable read access for all users on templates" ON templates FOR S
 
 -- Allow public insert access for template requests
 CREATE POLICY "Enable insert access for all users on template_requests" ON template_requests FOR INSERT WITH CHECK (true);
+
+-- Create deployments table
+CREATE TABLE deployments (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid, -- Required for auth
+  project_id uuid REFERENCES projects(id) ON DELETE CASCADE,
+  slug text UNIQUE NOT NULL,
+  html_code text DEFAULT '',
+  css_code text DEFAULT '',
+  js_code text DEFAULT '',
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Enable RLS for deployments
+ALTER TABLE deployments ENABLE ROW LEVEL SECURITY;
+
+-- Allow public read access for deployments by slug
+CREATE POLICY "Enable read access for all users on deployments" ON deployments FOR SELECT USING (true);
+
+-- Allow authenticated users to insert deployments
+CREATE POLICY "Enable insert access for authenticated users on deployments" ON deployments FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- Allow authenticated users to delete their own deployments
+CREATE POLICY "Enable delete access for authenticated users on deployments" ON deployments FOR DELETE USING (auth.uid() = user_id);

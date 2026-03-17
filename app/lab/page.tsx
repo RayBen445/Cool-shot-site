@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Play, Share2 } from "lucide-react";
+import { Play, Share2, Rocket } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -12,12 +12,14 @@ import { EditorPanel } from "@/components/csslab/editor-panel";
 import { PreviewPanel } from "@/components/csslab/preview-panel";
 import { TerminalPanel } from "@/components/csslab/terminal-panel";
 import { saveProject, getTemplateById, getProjectById } from "@/lib/db";
+import { supabase } from "@/lib/supabase";
 
 function LabContent() {
   const [html, setHtml] = useState("<h1>Hello CSSLab</h1>\n<p>Start editing to see magic happen.</p>");
   const [css, setCss] = useState("h1 {\n  color: #3b82f6;\n}\np {\n  color: #9ca3af;\n}");
   const [js, setJs] = useState("console.log('Welcome to CSSLab!');");
   const [srcDoc, setSrcDoc] = useState("");
+  const [isDeploying, setIsDeploying] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
   const { toast } = useToast();
   const router = useRouter();
@@ -134,6 +136,64 @@ function LabContent() {
     return () => window.removeEventListener('message', handleMessage);
   }, []);
 
+
+  const handleDeploy = async () => {
+    setIsDeploying(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!session) {
+        toast({
+          title: "Authentication required",
+          description: "You must be logged in to deploy projects.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const response = await fetch('/api/deploy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({ html, css, js })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Deployment failed');
+      }
+
+      const result = await response.json();
+
+      toast({
+        title: "Deployment Successful! 🚀",
+        description: (
+          <div className="mt-2 flex flex-col space-y-2">
+            <p>Your project is live at:</p>
+            <a
+              href={result.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:underline font-medium break-all"
+            >
+              {result.url}
+            </a>
+          </div>
+        ),
+      });
+    } catch (error: any) {
+      toast({
+        title: "Deployment Error",
+        description: error.message || "Failed to deploy project. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeploying(false);
+    }
+  };
+
   const handleShare = async () => {
     try {
       const data = await saveProject({ html_code: html, css_code: css, js_code: js });
@@ -174,6 +234,15 @@ function LabContent() {
           >
             <Play className="w-4 h-4 mr-2" />
             Build & Preview
+          </Button>
+                    <Button
+            size="sm"
+            onClick={handleDeploy}
+            disabled={isDeploying}
+            className="bg-purple-600 hover:bg-purple-700 text-white shadow-md shadow-purple-900/20"
+          >
+            <Rocket className="w-4 h-4 mr-2" />
+            {isDeploying ? "Deploying..." : "Deploy"}
           </Button>
           <Button
             size="sm"

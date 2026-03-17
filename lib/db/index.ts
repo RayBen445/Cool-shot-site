@@ -114,3 +114,85 @@ export async function createTemplateRequest(request: TemplateRequestData) {
 
   return data
 }
+
+export interface DeploymentData {
+  id?: string;
+  user_id: string;
+  project_id?: string;
+  slug: string;
+  html_code: string;
+  css_code: string;
+  js_code: string;
+  created_at?: string;
+}
+
+/**
+ * Save a new deployment to the database
+ */
+export async function createDeployment(deployment: DeploymentData) {
+  const { data, error } = await supabase
+    .from('deployments')
+    .insert([deployment])
+    .select()
+    .single()
+
+  if (error) {
+    console.error('Error creating deployment:', error)
+    throw error
+  }
+
+  return data
+}
+
+/**
+ * Fetch a deployment by its slug
+ */
+export async function getDeploymentBySlug(slug: string) {
+  const { data, error } = await supabase
+    .from('deployments')
+    .select('*')
+    .eq('slug', slug)
+    .single()
+
+  if (error) {
+    console.error(`Error fetching deployment with slug ${slug}:`, error)
+    throw error
+  }
+
+  return data
+}
+
+/**
+ * Fetch all deployments for a specific user
+ */
+export async function getDeploymentsByUser(userId: string) {
+  const { data, error } = await supabase
+    .from('deployments')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error(`Error fetching deployments for user ${userId}:`, error)
+    throw error
+  }
+
+  return data as DeploymentData[]
+}
+
+/**
+ * Delete a deployment by its ID
+ */
+export async function deleteDeployment(id: string) {
+  const { error } = await supabase
+    .from('deployments')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    console.error(`Error deleting deployment with ID ${id}:`, error)
+    throw error
+  }
+
+  return true
+}
