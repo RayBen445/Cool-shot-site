@@ -5,7 +5,7 @@ interface TerminalPanelProps {
 
 export function TerminalPanel({ logs, onClear }: TerminalPanelProps) {
   return (
-    <div className="h-full bg-gray-900 flex flex-col">
+    <div className="h-full w-full flex flex-col bg-gray-900 overflow-hidden">
       <div className="bg-gray-950 border-b border-t border-gray-800 px-4 py-1.5 flex justify-between items-center text-xs text-gray-400">
         <span>Console</span>
         <button
